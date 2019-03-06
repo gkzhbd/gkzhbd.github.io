@@ -325,7 +325,7 @@ path.domain, .tick line {
   font-size: 0.7em;
 }
 
-#popup {
+#myPopup {
   position: absolute;
   left: 10px;
   bottom: 10px;
