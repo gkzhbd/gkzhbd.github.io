@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Zurich Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+	
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #viewDiv {
+      filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
+    }
+    #controls {
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    #image {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-image:url('./background.jpg');
+      background-size: cover;
+      opacity: 0.7;
+    }
+    #artist {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-family: 'Reenie Beanie', cursive;
+      transform: rotate(-5deg);
+      font-size: 1.1em;
+    }
+/* Cursor for modal Link */
+.popup {
+  cursor: pointer;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 200px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+	
+  <script src="https://js.arcgis.com/4.10/"></script>
+  <!-- load Galleria and JQuery for the image gallery -->
+  <script src="./jquery.js"></script>
+  <script src="./galleria/galleria.js"></script>
+ 
+  <script>
+    require([
+	  "esri/Map",
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/SceneLayer",
+      "esri/core/watchUtils"
+    ], function(Map, WebScene, SceneView, SceneLayer, watchUtils) {
+      // you can tweak these parameters to change
+      // the style of the edges
+      const sketchEdges = {
+        type: "sketch",
+        color: [0, 0, 0, 0.8],
+        size: 1,
+        extensionLength: 5
+      };
+      // this renderers all the layers with semi-transparent white faces
+      // and displays the geometry with sketch edges
+      const renderer = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "mesh-3d",
+          symbolLayers: [{
+            type: "fill",
+            material: {
+              color: [255, 255, 255, 0.1],
+              colorMixMode: "replace"
+            },
+            edges: sketchEdges
+          }]
+        }
+      };
+      // load the scene layer from ArcGIS Online
+      // and set the renderer we defined above
+      const sceneLayer = new SceneLayer({
+        url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Gebaeude_ZuerichArt_4326/SceneServer", 
+        renderer: renderer,
+        popupEnabled: false
+      });
+      // I've created a webscene in ArcGIS Online
+      // the webscene has a transparent background,
+      // so that I can display the paper background
+      // create map
+      const webscene = new WebScene({
+        ground: {
+          opacity: 0
+        },
+        basemap: null,
+		layers: [sceneLayer]
+      });
+      // define the view
+      const view = new SceneView({
+        container: "viewDiv",
+        map: webscene,
+		environment: {
+		  background: {
+		    type: "color",
+			color: [0,0,0,0]
+		  },
+		  starsEnabled:false,
+		  atmosphereEnabled: false
+		},
+		camera: {
+          position: {
+            x: 8.54891918,
+            y: 47.3455014,
+            z: 1061.2
+          },
+          heading: 343.5,
+          tilt: 80
+        },
+		constraints: {
+          tilt: {
+            max: 90,
+            mode: "manual"
+          }
+        },
+        // this property should be set to true
+        // so that we can set a transparent background
+        alphaCompositingEnabled: true,
+        ui: {
+          components: ["attribution"]
+        }
+      });
+	  
+      // this part makes sure that the sceneLayer is rendered
+      // when we start the animation in the begining
+      /*view.whenLayerView(sceneLayer)
+        .then(function(layerView) {
+          watchUtils.whenFalseOnce(layerView, "updating", function(value) {
+            view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint,
+            {
+              // make the animation really slow
+              speedFactor: 0.005,
+              // use the same speed all the time during the animation
+              easing: "linear"
+            });
+          });
+        });*/
+      window.view = view;
+    });
+  </script>
+</head>
+
+<body>
+  <div id="image"></div>
+  <div id="viewDiv"></div>
+  <div id="artist">
+    <span>Zürich wie gezeichnet</span>
+  </div>	
+
+
+<body style="text-align:center">
+
+<!-- Trigger/Open The Modal -->
+<div id="myBtn" class="popup" onclick="mybtn()">Disclaimer</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+<div class="modal-content">
+    <span class="close">&times;</span>
+  <span class="popuptext" id="myPopup"> <h2>Disclaimer</h2>
+    <p>Für diese nicht-kommerzielle Anwendung zeigt sich das GIS-Kompetenzzentrum HBD der Stadt Zürich verantwortlich.</p>
+    <h4> Referenzen</h4>
+    Die Anwendung basiert auf frei nutzbaren Daten (Open Data) und Codes (Open Source). Hierzu gehören:</p>
+    <ul>
+      <li>3D-Gebäude (LOD2) der Stadt Zürich, die auf dem <a href="https://data.stadt-zuerich.ch/" target="_blank">Open Data Portal</a> zur freien Verfügung stehen.</li>
+      <li>"San Francisco Sketch" von <a href="https://github.com/RalucaNicola/JSAPI_demos" target="_blank">Raluca Nicola</a></ul></span>
+</div>
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+function mybtn() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+  </div>
+</body>
+</html>
