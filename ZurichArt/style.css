@@ -331,3 +331,8 @@ path.domain, .tick line {
   bottom: 10px;
   font-size: 0.7em;
 }
+#myBtn
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-size: 0.7em;
