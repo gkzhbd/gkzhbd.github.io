@@ -72,7 +72,6 @@ body {
     width: 148px;
     height: 38px;
     background: url(/stadt_zuerich_hochhaeuser/img/logo_stadt_zrh_blau.png);
-    background: -webkit-image-set(url(https://www.maps.stadt-zuerich.ch/zueriplan3/images/logo.png) 1x, url(https://www.maps.stadt-zuerich.ch/zueriplan3/images/logo.png) 2x);
     background-repeat: no-repeat;
 }
 .header-label {
