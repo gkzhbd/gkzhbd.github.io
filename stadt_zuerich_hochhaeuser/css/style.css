@@ -71,7 +71,7 @@ body {
     top: 0px;
     width: 148px;
     height: 38px;
-    background: url(https://www.maps.stadt-zuerich.ch/zueriplan3/images/logo.png);
+    background: url(/stadt_zuerich_hochhaeuser/img/logo_stadt_zrh_blau.png);
     background: -webkit-image-set(url(https://www.maps.stadt-zuerich.ch/zueriplan3/images/logo.png) 1x, url(https://www.maps.stadt-zuerich.ch/zueriplan3/images/logo.png) 2x);
     background-repeat: no-repeat;
 }
@@ -408,7 +408,7 @@ path.domain, .tick line {
   font-size: 0.7em;
 }
 
-/* TestBereich */
+/* Popups */
 
 #RechtContainer, #ImprContainer, #NutzungContainer {
   position: absolute;
