@@ -127,8 +127,7 @@ define([
         environment: {
           lighting: {
             ambientOcclusionEnabled: true,
-            directShadowsEnabled: false,
-			date: new Date("Sun Apr 15 2019 16:00:00 GMT+0100 (CET)")
+            directShadowsEnabled: false
           }
         }
       });
