@@ -106,7 +106,7 @@ body {
   height: 255px;
   min-width: 1400px;
   background-color: rgba(255,255,255,1);
-  box-shadow: 1px 1px 5px 0 rgba(100,100,100,0.75);
+  box-shadow: 1px 1px 35px 0 rgba(100,100,100,0.8);
 }
 
 #heightDiv {
