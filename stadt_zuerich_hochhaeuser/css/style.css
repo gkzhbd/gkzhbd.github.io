@@ -56,7 +56,7 @@ body {
 	position: absolute;
     background: #0070BC;
     color: white;
-	box-shadow: 1px 1px 5px 0 rgba(100,100,100,0.25);
+	box-shadow: 1px 1px 15px 0 rgba(100,100,100,0.3);
 }
 .typo-header {
     font-size: 0.875rem;
