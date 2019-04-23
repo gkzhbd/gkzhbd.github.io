@@ -425,6 +425,7 @@ path.domain, .tick line {
   display: none;
   font-familiy: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
   text-align: justify;
+  overflow: auto;
 }
 
 #RechtContainer .esri-icon-close, #ImprContainer .esri-icon-close, #NutzungContainer .esri-icon-close {
