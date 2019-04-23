@@ -22,7 +22,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;;
+  font-family: "Helvetica";
 }
 
 body {
@@ -78,7 +78,7 @@ body {
     position: absolute;
     left: 230px;
     top: 6px;
-	font-family: Arial
+    font-family: "Helvetica";
 }
 
 
@@ -128,7 +128,7 @@ body {
   top: 50px;
   padding: 5px;
   color: white;
-  font-family: Arial;
+  font-family: "Helvetica";
   width: 260px;
 }
 
@@ -137,7 +137,7 @@ svg {
 }
 
 button {
-  font-family: "Avenir Next W00","Helvetica Neue";
+  font-family: "Helvetica";
   position: relative;
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -222,7 +222,7 @@ button {
 .tooltip {
   font-size: 0.7em;
   font-weight: bold;
-  font-family: "Avenir Next W00","Helvetica Neue";
+  font-family: "Helvetica";
 }
 
 rect.selection {
@@ -423,7 +423,7 @@ path.domain, .tick line {
   z-index: 10000;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   display: none;
-  font-familiy: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-familiy: "Helvetica";
   text-align: justify;
   overflow: auto;
 }
