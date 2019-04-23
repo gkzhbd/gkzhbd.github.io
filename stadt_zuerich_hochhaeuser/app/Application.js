@@ -466,7 +466,6 @@ define([
 	  on(dom.byId("NutzungLink"), "click", function() {
         dom.byId("RechtContainer").style.display = "none";
       });
-    }
 
     }
   });
