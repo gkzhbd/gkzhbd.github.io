@@ -128,7 +128,7 @@ define([
           lighting: {
             ambientOcclusionEnabled: true,
             directShadowsEnabled: true,
- 	    date: new Date("Tue Apr 16 2019 16:00:00 GMT+0100 (CET)")
+			date: new Date("Tue Apr 16 2019 16:00:00 GMT+0100 (CET)")
           }
         }
       });
@@ -445,6 +445,26 @@ define([
       });
       on(dom.byId("close3"), "click", function() {
         dom.byId("NutzungContainer").style.display = "none";
+      });
+	  
+	  // schliessen von PopUps beim Öffnen von anderen PopUps
+      on(dom.byId("ImprLink"), "click", function() {
+        dom.byId("NutzungContainer").style.display = "none";
+      });
+	  on(dom.byId("RechtLink"), "click", function() {
+        dom.byId("NutzungContainer").style.display = "none";
+      });
+	  on(dom.byId("NutzungLink"), "click", function() {
+        dom.byId("ImprContainer").style.display = "none";
+      });
+	  on(dom.byId("RechtLink"), "click", function() {
+        dom.byId("ImprContainer").style.display = "none";
+      });
+	  on(dom.byId("ImprLink"), "click", function() {
+        dom.byId("RechtContainer").style.display = "none";
+      });
+	  on(dom.byId("NutzungLink"), "click", function() {
+        dom.byId("RechtContainer").style.display = "none";
       });
     }
   });
