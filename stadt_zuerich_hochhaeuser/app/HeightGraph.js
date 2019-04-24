@@ -240,7 +240,7 @@ define([
           .classed("hover-graphic", true)
           .attr("x", cx)
           .attr("y", cy - 21)
-          .attr("text-anchor", "middle")
+          .attr("text-anchor", "end")
           .text(function() {
             var a = d.attributes;
             var name = a.name !== " " ? a.name : "Building " + a.name;
