@@ -55,7 +55,7 @@ define([
 
       // set the building name, height and construction year from the building attributes
       var name = (attributes.name === "") ? "Hochhaus" : attributes.name;
-      view.popup.content = "<br><h3>" + name  + "</h3>"
+      view.popup.content = "<h3>" + name  + "</h3>"
       + "<p class='info'> <img src='./img/height.png'> " + Math.round(attributes.heightroof) + " Meter"
       + "<img src='./img/construction.png'> " + attributes.cnstrct_yr + "</p>"
 
@@ -71,7 +71,7 @@ define([
       // Wikipedia API is used to retrieve an abstract of the building. All retrieved
       // articles are under the Creative Commons Attribution-ShareAlike License.
       // See https://wikimediafoundation.org/wiki/Terms_of_Use for details.
-      function getWikiInfo() {
+      /*function getWikiInfo() {
         var url = "https://de.wikipedia.org/w/api.php?action=query" +
         "&list=search&srsearch=" + attributes.name + "&srwhat=text&prop=extracts|pageimages|imageinfo|pageterms|info&exintro=1&explaintext=1&exlimit=20&pilimit=20&piprop=original" +
         "&generator=geosearch&ggscoord=" + position.latitude + "%7C" + position.longitude + "&ggsradius=200&ggslimit=20&origin=*&format=json";
@@ -132,7 +132,7 @@ define([
           }).otherwise(function(err) {
             console.log(err);
           });
-      }
+      }*/
     }
   });
 });

@@ -252,8 +252,7 @@ rect.handle--n, rect.handle--s {
 
 .esri-popup__main-container{
   max-width: 400px;
-  height: 40% !important;
-  max-height: 100% !important;
+  height: 100px;
   overflow: hide;
 }
 
