@@ -195,7 +195,7 @@ define([
           svg.select("#lower-indicator")
             .attr("y", d3.event.selection[1] + 15)
             .text(Math.round(yScale.invert(d3.event.selection[1])));
-          state.filteredBuildings = [yScale.invert(d3.event.selection[1]), yScale.invert(d3.event.selection[0])];
+          //state.filteredBuildings = [yScale.invert(d3.event.selection[1]), yScale.invert(d3.event.selection[0])];
       });
       brush.on("end", function() {
         svg.select("#upper-indicator")
@@ -205,6 +205,7 @@ define([
         if (!d3.event.selection) {
           yAxisGroup.call(brush).call(brush.move, [yScale(1500), yScale(0)]);
         }
+		 state.filteredBuildings = [yScale.invert(d3.event.selection[1]), yScale.invert(d3.event.selection[0])];
       });
 
       // add the circles and the selection and hovering groups to the class
