@@ -241,10 +241,20 @@ define([
           .attr("x", cx)
           .attr("y", cy - 21)
           .attr("text-anchor", "end")
-          .text(function() {
+		  .append("tspan")
+		  .attr("x", cx)
+		  .attr("class", "text")
+		  .text(function() {
             var a = d.attributes;
-            var name = a.name !== " " ? a.name : "Building " + a.name;
-            return name + " gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + " m";
+            return a.name !== " " ? a.name : "Building " + a.name;
+			})
+		  .append("tspan")
+		  .attr("class", "text")
+		  .attr("x", cx)
+		  .attr("dy", "1em")
+		  .text(function() {
+            var a = d.attributes;
+            return "gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + "m";
           });
         var bbox = text.node().getBBox();
 
