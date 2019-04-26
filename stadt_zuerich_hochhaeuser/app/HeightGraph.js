@@ -106,7 +106,7 @@ define([
           .attr("width", 69); 
 
       // handlers for filtering
-      var groupHandlers = svg.append("g");
+      /*var groupHandlers = svg.append("g");
         groupHandlers.append("rect")
         .classed("top", true)
         .attr("x", xScale(2020))
@@ -126,7 +126,7 @@ define([
         .attr("rx", 5)
         .attr("ry", 0)
         .attr("cursor", "ns-resize")
-        .style("fill", "#bbb");
+        .style("fill", "#bbb");*/
 
       // define vertical axis and append it to the svg container
       var yAxisGroup = svg.append("g")
