@@ -159,7 +159,20 @@ document.getElementById("Warnung").innerHTML = myFunction()
 			<p id="Warnung"></p>
         </div>
   <div id="layerToggle">
-     <input type="checkbox" id="HHGebieteLayer"> Hochhausgebiete nach BZO<br>&emsp;&nbsp;<span style="font-size:12px;"> Rot: I, Grün: II, Violett: III</span><br>
+     <input type="checkbox" id="HHGebieteLayer">
+	 <span>Hochhausgebiete nach der Bau-</span><div style="margin-left:25px">und Zonenverordnung (BZO)</div>
+	 <div>
+	   <image id="BZO" src="./img/BZO1.PNG">
+	   <span id="Legende">Hochhausgebiet I</span>
+	 </div>
+	 <div>
+	   <image id="BZO" src="./img/BZO2.PNG">
+	   <span id="Legende">Hochhausgebiet II</span>
+	 </div>
+	 <div>
+	    <image id="BZO" src="./img/BZO3.PNG">
+	   <span id="Legende">Hochhausgebiet III</span>
+	 </div>
      <!--<input type="checkbox" id="VerdichtungLayer"> Verdichtungsgebiete gemäss <br>&emsp;&nbsp; kommunalem Richtplan S, L, ÖBA-->
   </div>
   <!--<div id="logo">

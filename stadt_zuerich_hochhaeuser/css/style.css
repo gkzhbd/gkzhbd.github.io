@@ -52,7 +52,7 @@ body {
 }
 .bg-blue {
 	width: 320px;
-	height: 120px;
+	height: 192px;
 	position: absolute;
     background: #0070BC;
     color: white;
@@ -233,7 +233,7 @@ rect.selection {
 rect.handle--n, rect.handle--s {
   fill: #bbb;
   stroke: #bbb;
-  height: 2px !important;
+  height: 5px !important;
 }
 
 .wikiImage{
@@ -438,5 +438,50 @@ path.domain, .tick line {
   padding: 10px;
 }
 
+.Legende {
+  font-size: 12px;
+}
+
+#Legende {
+	font-size:12px;
+}
+
+#color1 {
+background-color: rgb(247, 180, 182);
+width: 30px; 
+height: 30px; 
+text-align: center; 
+vertical-align: middle; 
+margin-right: 20px;
+}
+
+#color3 {
+background-color: rgb(185, 174, 243); 
+width: 80px; 
+height: 80px; 
+text-align: center; 
+vertical-align: middle; 
+margin-right: 20px
+}
+
+#color2 {
+background-color: rgb(201, 245, 182); 
+width: 80px; 
+height: 80px; 
+text-align: center; 
+vertical-align: middle; 
+margin-right: px
+}
+
+#BZO {
+width: 25px; 
+height: 25px; 
+text-align: center; 
+vertical-align: middle; 
+margin-right: 10px;
+margin-top: 3px;
+margin-bottom: 3px;
+margin-left: 45px;
+}
 
 
