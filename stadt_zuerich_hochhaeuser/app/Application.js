@@ -90,7 +90,7 @@ define([
 
       // create map
       var map = new Map({
-        basemap: "topo",
+        basemap: "gray",
         ground: "world-elevation"
       });
 
