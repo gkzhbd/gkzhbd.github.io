@@ -37,6 +37,7 @@ define([
   "esri/layers/FeatureLayer",
   "esri/tasks/support/Query",
   "esri/renderers/SimpleRenderer",
+  "esri/core/watchUtils",
 
   "app/RendererGenerator",
   "app/HeightGraph",
@@ -50,7 +51,7 @@ define([
   "dojo/on",
   "dojo/query"
 ], function(declare, Accessor,
-  Map, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query,
+  Map, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils,
   RendererGenerator, HeightGraph, Timeline, InfoWidget, labels, searchWidget, categorySelection,
   dom, on, domQuery
 ) {
@@ -132,7 +133,11 @@ define([
           }
         }
       });
-	  
+    
+      watchUtils.whenFalse(view, "updating", function (evt) {
+        dom.byId("loading").style.display = "none";
+      });
+
 	  // remove navigation widgets from upper left corner
       view.ui.empty("top-left");
 

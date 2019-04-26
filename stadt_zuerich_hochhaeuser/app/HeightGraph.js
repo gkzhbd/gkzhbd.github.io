@@ -25,9 +25,10 @@
  ********************************************/
 
 define([
+  "dojo/dom",
   "dojo/_base/declare",
   "d3"
-], function(declare, d3) {
+], function(dom, declare, d3) {
   return declare(null, {
 
     constructor: function(container, settings, features, state) {
@@ -84,6 +85,17 @@ define([
       appendHorizontalLine(this.paddingLeft, 50, 2025, 50);
       appendHorizontalLine(this.paddingLeft, 0, 2025, 0);
       appendHorizontalLine(this.paddingLeft, 127, 2011, 127);
+
+      // add delay before filtering to make sure Loading is displayed
+      function delayFilter (status, state, yScale, d3event){
+        if (!status) {
+          state.filteredBuildings = [yScale.invert(d3event.selection[1]), yScale.invert(d3event.selection[0])];
+          return;
+        } else {
+          dom.byId("loading").style.display = "inline";
+          setTimeout (delayFilter, 200, false, state, yScale, d3event);
+        }
+      }
 
       // add image of the building to better understand the vertical height axis
       svg.append("image")
@@ -195,7 +207,6 @@ define([
           svg.select("#lower-indicator")
             .attr("y", d3.event.selection[1] + 15)
             .text(Math.round(yScale.invert(d3.event.selection[1])));
-          //state.filteredBuildings = [yScale.invert(d3.event.selection[1]), yScale.invert(d3.event.selection[0])];
       });
       brush.on("end", function() {
         svg.select("#upper-indicator")
@@ -205,7 +216,9 @@ define([
         if (!d3.event.selection) {
           yAxisGroup.call(brush).call(brush.move, [yScale(1500), yScale(0)]);
         }
-		 state.filteredBuildings = [yScale.invert(d3.event.selection[1]), yScale.invert(d3.event.selection[0])];
+	
+      delayFilter (true, state, yScale, d3.event);
+
       });
 
       // add the circles and the selection and hovering groups to the class
