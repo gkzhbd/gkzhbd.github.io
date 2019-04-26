@@ -89,8 +89,26 @@ define([
       // add delay before filtering to make sure Loading is displayed
       function delayFilter (status, state, yScale, d3event){
         if (!status) {
-          state.filteredBuildings = [yScale.invert(d3event.selection[1]), yScale.invert(d3event.selection[0])];
+
+          oldMin = 0;
+          oldMax = 150;
+          if (state.filteredBuildings)
+          {
+            oldMin = state.filteredBuildings[0];
+            oldMax = state.filteredBuildings[1];
+          } 
+          newRange = [yScale.invert(d3event.selection[1]), yScale.invert(d3event.selection[0])];
+
+          newMax = newRange[1];
+          newMin = newRange[0];
+          if ((Math.abs(newMin - oldMin) == 0) && (Math.abs(newMax - oldMax) == 0)) {
+            dom.byId("loading").style.display = "none";
+          } else {
+            state.filteredBuildings = newRange;
+          }
+          
           return;
+
         } else {
           dom.byId("loading").style.display = "inline";
           setTimeout (delayFilter, 200, false, state, yScale, d3event);
@@ -202,7 +220,7 @@ define([
           groupHandlers.select("rect.bottom")
             .attr("y", d3.event.selection[1] - 1);
           svg.select("#upper-indicator")
-            .attr("y", d3.event.selection[0] - 5)
+            .attr("y", d3.event.selection[0] - 1)
             .text(Math.round(yScale.invert(d3.event.selection[0])));
           svg.select("#lower-indicator")
             .attr("y", d3.event.selection[1] + 15)
