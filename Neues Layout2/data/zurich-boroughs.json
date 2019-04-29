@@ -1,0 +1,191 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 8,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5410841, 
+          47.3728579
+        ]
+      },
+      "properties": {
+        "FID": 8,
+        "Name": "Kreis 1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 106,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5319807,
+          47.3458205
+        ]
+      },
+      "properties": {
+        "FID": 106,
+        "Name": "Kreis 2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 109,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5067671,
+          47.3620972
+        ]
+      },
+      "properties": {
+        "FID": 109,
+        "Name": "Kreis 3"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 112,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5188572, 
+		  47.3796134
+        ]
+      },
+      "properties": {
+        "FID": 112,
+        "Name": "Kreis 4"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 115,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5199245,
+		  47.3882525
+        ]
+      },
+      "properties": {
+        "FID": 115,
+        "Name": "Kreis 5"        
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 116,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+           8.5466645,
+		  47.3922038
+        ]
+      },
+      "properties": {
+        "FID": 116,
+        "Name": "Kreis 6"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 118,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5777797,
+		  47.3711881      
+        ]
+      },
+      "properties": {
+        "FID": 118,
+        "Name": "Kreis 7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 119,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5578466,
+		  47.3521028
+		 ]
+      },
+      "properties": {
+        "FID": 119,
+        "Name": "Kreis 8"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 121,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.4822695,
+		  47.3839447
+		 ]
+      },
+      "properties": {
+        "FID": 121,
+        "Name": "Kreis 9"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 122,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.4994998,
+		  47.4064855
+        ]
+      },
+      "properties": {
+        "FID": 122,
+        "Name": "Kreis 10"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 124,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.5254223,
+		  47.4212414
+        ]
+      },
+      "properties": {
+        "FID": 124,
+        "Name": "Kreis 11"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 125,
+      "geometry": {
+        "type": "Point",
+        "coordinates":	[
+          8.5743499,
+		  47.4028901
+        ]
+      },
+      "properties": {
+        "FID": 125,
+        "Name": "Kreis 12"
+      }
+    }
+	]
+}
