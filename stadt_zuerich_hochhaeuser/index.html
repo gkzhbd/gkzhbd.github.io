@@ -83,34 +83,33 @@ document.getElementById("Warnung").innerHTML = myFunction()
 
 <!--Warnmeldung bei mobilem Endgerät-->
 <script>
-var isMobile = {
-  Android: function () {
-      return navigator.userAgent.match(/Android/i);
-  },
-  BlackBerry: function () {
-      return navigator.userAgent.match(/BlackBerry/i);
-  },
-  iOS: function () {
-      return navigator.userAgent.match(/iPhone|iPod|iPad/i);
-  },
-  Opera: function () {
-      return navigator.userAgent.match(/Opera Mini/i);
-  },
-  Windows: function () {
-      return navigator.userAgent.match(/IEMobile/i);
-  },
-  any: function () {
-      return ((isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()));
+function MobileFunction() {
+  alert("Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer mit Google Chrome oder Mozilla Firefox.");
   }
+var isMobile = {
+    Android: function () {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function () {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function () {
+        return navigator.userAgent.match(/iPhone|iPod|iPad/i);
+    },
+    Opera: function () {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function () {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function () {
+        return ((isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()));
+    }
 };
 
-function detectDevice() {
-  var result = 'No mobile device';
-  if (isMobile.any()) {
-      result = 'Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer mit Google Chrome oder Mozilla Firefox.';
-  }
-  alert(result);
-};
+if (isMobile.any()) {
+document.getElementById("mobil").innerHTML = MobileFunction()
+}
 </script>
 
 <!-- Einbindung der Applikation in HTML -->
@@ -188,7 +187,7 @@ function detectDevice() {
             </a>
 
             <div data-attach-point="headerLabel" class="header-label" >Hochhäuser</div>
-			<p id="Warnung"></p>
+			<p id="Warnung"></p><p id="mobil"></p>
         </div>
   <div id="layerToggle">
      <input type="checkbox" id="HHGebieteLayer">
