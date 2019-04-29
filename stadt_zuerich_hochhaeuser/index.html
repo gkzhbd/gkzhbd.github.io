@@ -53,10 +53,10 @@
   <script src="./lib/jquery.js"></script>
   <script src="./lib/galleria/galleria.js"></script>
 
-  <!-- Warnung für Internet Explorer -->
+  <!-- Warnung für Internet Explorer, Code Snippet von https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser/5916928 -->
 <script>
 function myFunction() {
-  alert("Bitte benutzen Sie einen aktuellen Browser wie Google Chrome, um eine optimale Performance der Applikation zu erreichen");
+  alert("Bitte benutzen Sie einen aktuellen Browser wie Google Chrome, um eine optimale Performance der Applikation zu erreichen.");
 }
 navigator.browserSpecs = (function(){
     var ua = navigator.userAgent, tem, 
@@ -79,6 +79,38 @@ navigator.browserSpecs = (function(){
 if (navigator.browserSpecs.name == 'IE') {
 document.getElementById("Warnung").innerHTML = myFunction()
 }
+</script>
+
+<!--Warnmeldung bei mobilem Endgerät-->
+<script>
+var isMobile = {
+  Android: function () {
+      return navigator.userAgent.match(/Android/i);
+  },
+  BlackBerry: function () {
+      return navigator.userAgent.match(/BlackBerry/i);
+  },
+  iOS: function () {
+      return navigator.userAgent.match(/iPhone|iPod|iPad/i);
+  },
+  Opera: function () {
+      return navigator.userAgent.match(/Opera Mini/i);
+  },
+  Windows: function () {
+      return navigator.userAgent.match(/IEMobile/i);
+  },
+  any: function () {
+      return ((isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()));
+  }
+};
+
+function detectDevice() {
+  var result = 'No mobile device';
+  if (isMobile.any()) {
+      result = 'Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer mit Google Chrome oder Mozilla Firefox.';
+  }
+  alert(result);
+};
 </script>
 
 <!-- Einbindung der Applikation in HTML -->
