@@ -81,7 +81,7 @@ document.getElementById("Warnung").innerHTML = myFunction()
 }
 </script>
 
-<!--Warnmeldung bei mobilem Endgerät-->
+<!--Warnmeldung bei mobilem Endgerät, angepasstes Codesnippet von https://blog.julitec.com/dev/mit-javascript-mobile-ger%C3%A4te-erkennen-->
 <script>
 function MobileFunction() {
   alert("Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer mit Google Chrome oder Mozilla Firefox.");
@@ -104,11 +104,14 @@ var isMobile = {
     },
     any: function () {
         return ((isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()));
-    }
+    },
+	  nothing: function () {
+	      return (!(isMobile.any()));
+	}
 };
 
 if (isMobile.any()) {
-document.getElementById("mobil").innerHTML = MobileFunction()
+document.getElementById("Warnung").innerHTML = MobileFunction()
 }
 </script>
 
@@ -159,10 +162,19 @@ document.getElementById("mobil").innerHTML = MobileFunction()
       var app = new Application(settings);
       app.init({ view: "viewDiv", timeline: "timeDiv", heightGraph: "heightDiv", categories: "categoryDiv" });
     });
-  </script>
+</script>
 </head>
 
 <body>
+  <!--Warnmeldung bei zu kleinem Fenster-->
+  <script>
+        function Fenster() {
+       alert("Diese Applikation ist auf eine Fensterbreite von mindestens 1534 Pixel optimiert. Verwenden Sie nach Möglichkeit einen breiteren Bildschirm oder erhöhen Sie die Bildschirmauflösung.")
+       }  
+        if (document.body.offsetWidth < 1534 && isMobile.nothing()) {
+       document.getElementById("Warnung").innerHTML = Fenster()
+       }
+  </script>
   <div id="viewDiv"></div>
   <div id="loading">
     <p id="loadingInfo">
@@ -187,7 +199,7 @@ document.getElementById("mobil").innerHTML = MobileFunction()
             </a>
 
             <div data-attach-point="headerLabel" class="header-label" >Hochhäuser</div>
-			<p id="Warnung"></p><p id="mobil"></p>
+			<p id="Warnung"></p>
         </div>
   <div id="layerToggle">
      <input type="checkbox" id="HHGebieteLayer">
@@ -291,5 +303,4 @@ document.getElementById("mobil").innerHTML = MobileFunction()
 				<a id="ImprLink" style="padding-left:1.8em">Impressum</a>
 </div>
 </body>
-
 </html>
