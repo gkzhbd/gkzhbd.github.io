@@ -325,7 +325,7 @@ define([
               if (selectHighlight) {
                 selectHighlight.remove();
               }
-              domQuery(".esri-component.esri-search.esri-widget")[0].style.display = "inline";
+              //domQuery(".esri-component.esri-search.esri-widget")[0].style.display = "inline";
             }
           });
         })
