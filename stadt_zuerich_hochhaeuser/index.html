@@ -166,14 +166,15 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
 </head>
 
 <body>
-  <!--Warnmeldung bei zu kleinem Fenster-->
-  <script>
-        function Fenster() {
-       alert("Diese Applikation ist auf eine Fensterbreite von mindestens 1534 Pixel optimiert. Verwenden Sie nach Möglichkeit einen breiteren Bildschirm oder erhöhen Sie die Bildschirmauflösung.")
-       }  
-        if (document.body.offsetWidth < 1534 && isMobile.nothing()) {
+<!--Warnmeldung bei zu kleinem Fenster-->
+
+<script>
+    function Fenster() {
+      alert("Diese Applikation ist auf eine Fensterbreite von mindestens 1534 Pixel optimiert. Verwenden Sie nach Möglichkeit einen breiteren Bildschirm oder erhöhen Sie die Bildschirmauflösung.")
+    }  
+    if (document.body.offsetWidth < 1534 && isMobile.nothing()) {
        document.getElementById("Warnung").innerHTML = Fenster()
-       }
+    }
   </script>
   <div id="viewDiv"></div>
   <div id="loading">
@@ -277,24 +278,27 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
     <span class="esri-icon-close" id="close3"></span>
     <h2>Nutzungshinweise</h2>
     <h3> Was ist das für eine Anwendung?</h3>
-    <p>Bei dieser Anwendung handelt um eine interaktive Karte mit den Hochhäusern der Stadt Zürich.</p>
+    <p>Die Webapplikation zeigt eine gesamtstädtische Übersicht aller bestehenden und einige der geplanten Hochhäuser. Sie wurde als Grundlage für die Überprüfung und Aktualisierung der Hochausrichtlinien und –gebiete erstellt.
+      Die Anwendung umfasst ein interaktives 3D-Kartentool, welches mit einem Diagramm zu Höhe und Baujahr der Gebäude verknüpft ist.<br>
+      <br>
+      Datengrundlage bilden die Gebäude aus dem <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html">3D-Stadtmodell</a> der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich.
+      Zusätzlich können die aktuellen Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html">BZO2016</a>) ein- und ausgeblendet werden.
+      </p>
 	<h3>Was sind Hochhäuser?</h3>
-	<p>Christophs Antwort?</p>
+	<p>Gemäss kantonalem Planungs- und Baugesetz (§ 282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
 	<h3>Wie nutze ich die Anwendung?</h3>
-	<p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter und Microsoft Edge Version 17 oder älter funktioniert diese Anwendung möglicherweise nicht einwandfrei. Benutzen Sie in einem solchen Fall einen aktuellen Browser wie beispielsweise Google Chrome oder Mozilla Firefox.</p>
+	<p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter, Microsoft Edge Version 17 oder älter und Mozilla Firefox funktioniert diese Anwendung möglicherweise nicht einwandfrei. Benutzen Sie in einem solchen Fall einen anderen Browser wie beispielsweise Google Chrome oder Apple Safari.</p>
 	<h4>Navigation</h4>
-	<p>Mit dem Scrollrad Ihrer Computermaus können Sie in die Webszene rein- und rauszoomen. Halten Sie die linke Maustaste gedrückt, die Ansicht nach links und rechts bzw. nach vorne und hinten zu verschieben. Wenn die linke Maustaste gedrücklt ist, können Sie die Ansicht drehen.</p>
+	<p>Mit dem Scrollrad der Computermaus kann in die Webszene rein- und rausgezoomt werden. Um die Ansicht nach links und rechts bzw. nach vorne und hinten zu verschieben, wird die gedrückte linke Maustaste verwendet. Mit der gedrückten rechten Maustaste kann die Ansicht gedreht werden.</p>
 	<h4>Selektion</h4>
-	<p>Die blau eingefärbten Gebäude können Sie mit einem Mausklick selektieren. Im oben rechts erscheinenden Fenster wird - falls vorhanden - der Name des Hochhauses, die Höhenangabe sowie das Baujahr eingeblendet. Die Hochhäuser können zudem auch über die blauen Punkte im untenstehenden Diagramm ausgewählt werden. Klicken Sie hierfür auf einen beliebigen Punkt. Das entsprechende Hochhaus wird auf der Karte gelb hervorgehoben.</p>
+	<p>Die blau eingefärbten Gebäude können mit einem Mausklick selektiert werden. Im oben rechts erscheinenden Fenster wird - falls vorhanden - der Name des Hochhauses, die Höhenangabe sowie das Baujahr eingeblendet. Die Hochhäuser können zudem auch über die blauen Punkte im untenstehenden Diagramm ausgewählt werden: Mit einem Klick auf einen beliebigen Punkt wird das entsprechende Hochhaus auf der Karte gelb hervorgehoben.</p>
 	<h4>Diagramm</h4>
 	<p>Neben der oben beschriebenen Selektion von Punkten bzw. Hochhäusern bietet das Diagramm weitere Funktionalitäten:
 	<ul>
-		<li>Verwenden Sie die untenstehenden Schaltflächen mit den Jahreszahlen, um gezielt die Hochhäuser aus bestimmten Epochen ein- und auszublenden.</li>
-		<li>Die rechtstehenden Schaltflächen ermöglichen Ihnen es, nur Wohnhochhäuser oder die höchsten 20 Gebäude anzuzeigen lassen.</li>
-		<li>Der obere und der untere Rand vom Diagramm lassen sich verschieben. So ist es möglich die Anzeige der Gebäude auf bestimmte Höhen zu begrenzen</li>
+		<li>Zur gezielten Ein- und Ausblendung der Hochhäuser aus bestimmten Epochen können die untenstehenden Schaltflächen mit den Jahreszahlen verwendet werden.</li>
+		<li>Die rechtsstehenden Schaltflächen ermöglichen es, nur Wohnhochhäuser oder die höchsten 20 Gebäude anzuzeigen lassen.</li>
+		<li>Der obere und der untere Rand vom Diagramm lassen sich mit der linken Maustaste verschieben. So ist es möglich die Anzeige der Gebäude auf bestimmte Höhen zu begrenzen.</li>
 	</ul>
-	<h3>Welche Daten werden angezeigt?</h3>
-	<p>Absprache mit Christoph</p>
   </div>
   <div id="footer">
 		© 2019 Stadt Zürich
