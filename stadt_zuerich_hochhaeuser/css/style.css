@@ -71,7 +71,7 @@ body {
     top: 2px;
     width: 148px;
     height: 38px;
-    background: url(/stadt_zuerich_hochhaeuser/img/logo_stadt_zrh_blau.png);
+    background: url(../img/logo_stadt_zrh_blau.png);
     background-repeat: no-repeat;
 }
 .header-label {
@@ -481,7 +481,7 @@ vertical-align: middle;
 margin-right: 10px;
 margin-top: 3px;
 margin-bottom: 3px;
-margin-left: 27px;
+margin-left: 26px;
 }
 
 

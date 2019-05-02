@@ -155,7 +155,7 @@ define([
       var brush = d3.brushY()
         .extent([[0, this.paddingTop],[this.width, this.height - this.paddingBottom]]);
       yAxisGroup.call(brush).call(brush.move, [yScale(buildingOptions.maxHeight), yScale(buildingOptions.minHeight)]);
-      svg.select(".overlay").attr("display", "none");
+      svg.select(".overlay").attr("display","none");
 
       // add building features as circles to the graph
       var circles = svg.selectAll("circle")
