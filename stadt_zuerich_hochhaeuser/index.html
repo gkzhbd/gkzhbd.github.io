@@ -32,7 +32,7 @@
 
   <!-- Load AMD modules: the application itself and D3  -->
   <script>
-    var locationPath = location.pathname.replace(/\/[^\/]+$/, "");
+    var locationPath = location.pathname.replace(/\/[^\/]+$/, "").replace("index.html","");
     var dojoConfig = {
       packages: [{
         name: "d3",
