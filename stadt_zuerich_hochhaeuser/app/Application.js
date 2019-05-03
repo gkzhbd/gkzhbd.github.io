@@ -90,7 +90,7 @@ define([
 
       // create map
       var map = new Map({
-        basemap: "gray",
+        basemap: "topo",
         ground: "world-elevation"
       });
 
@@ -128,8 +128,8 @@ define([
         environment: {
           lighting: {
             ambientOcclusionEnabled: true,
-            directShadowsEnabled: false,
-			date: new Date("Tue Apr 16 2019 16:00:00 GMT+0100 (CET)")
+            directShadowsEnabled: true,
+			date: new Date("Tue Jun 21 2019 10:00:00 GMT+0100 (CET)")
           }
         }
       });
@@ -148,17 +148,15 @@ define([
       var filter = [settings.buildingOptions.minHeight, settings.buildingOptions.maxHeight, settings.buildingOptions.minCnstrctYear, settings.buildingOptions.maxCnstrctYear];
       var definitionExpression = generateDefinitionExpression(filter);
 
+      
       // scene layer with the buildings
       var sceneLayer = new SceneLayer({
         url: settings.buildingsUrl,
         popupEnabled: false,
         outFields: ["*"],
         //definitionExpression: definitionExpression
-		
-		
+
 	  });
-	  
-	  
 
       var rendererGen = new RendererGenerator(this.settings, sceneLayer, "CNSTRCT_YR", state);
 
