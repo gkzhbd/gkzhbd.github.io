@@ -32,7 +32,7 @@
 
   <!-- Load AMD modules: the application itself and D3  -->
   <script>
-    var locationPath = location.pathname.replace(/\/[^\/]+$/, "").replace("index.html","");
+    var locationPath = location.pathname.replace(/\/[^\/]+$/, "").replace("/", "").replace("index.html","");
     var dojoConfig = {
       packages: [{
         name: "d3",
@@ -56,7 +56,7 @@
   <!-- Warnung für Internet Explorer, Code Snippet von https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser/5916928 -->
 <script>
 function myFunction() {
-  alert("Bitte benutzen Sie einen aktuellen Browser wie Google Chrome, um eine optimale Performance der Applikation zu erreichen.");
+  alert("Bitte benutzen Sie einen aktuellen Browser, um eine optimale Performance der Anwendung zu erreichen.");
 }
 navigator.browserSpecs = (function(){
     var ua = navigator.userAgent, tem, 
@@ -84,7 +84,7 @@ document.getElementById("Warnung").innerHTML = myFunction()
 <!--Warnmeldung bei mobilem Endgerät, angepasstes Codesnippet von https://blog.julitec.com/dev/mit-javascript-mobile-ger%C3%A4te-erkennen-->
 <script>
 function MobileFunction() {
-  alert("Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer mit Google Chrome oder Mozilla Firefox.");
+  alert("Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer.");
   }
 var isMobile = {
     Android: function () {
@@ -161,7 +161,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
       // initialize application
       var app = new Application(settings);
       app.init({ view: "viewDiv", timeline: "timeDiv", heightGraph: "heightDiv", categories: "categoryDiv" });
-    });
+  });
 </script>
 </head>
 
@@ -204,7 +204,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
         </div>
   <div id="layerToggle">
      <input type="checkbox" id="HHGebieteLayer">
-	 <span>Hochhausgebiete nach der Bau-</span><div style="margin-left:25px">und Zonenverordnung (BZO)</div>
+	 <span>Hochhausgebiete gemäss Bau-</span><div style="margin-left:25px">und Zonenordnung (BZO)</div>
 	 <div>
 	   <image id="BZO" src="./img/BZO1.PNG">
 	   <span id="Legende">Hochhausgebiet I</span>
@@ -242,19 +242,19 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
   <div id="impressumLink"><a>Disclaimer</a></div>-->
   
   
-  <div id="RechtContainer">
+<div id="RechtContainer">
     <span class="esri-icon-close" id="close1"></span>
     <h2>Rechtliche Hinweise</h2>
     <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung "Manhattan Skyscraper Explorer" von <a href="https://github.com/RalucaNicola/JSAPI_demos" target="_blank">Raluca Nicola</a> erstellt. Der Code dieser Anwendung ist Open Source.
 	<br><br> Folgende Bibliotheken, APIs und Datensätze werden genutzt:
     <ul>
-      <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.7</a> </li>
+      <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.7</a></li>
       <li>Diagramm: <a href="https://d3js.org/" target="_blank">D3Js</a> </li>
       <li>Daten: 
 	  <ul>
 		<li>3D-Gebäudedaten: <a href="https://data.stadt-zuerich.ch/dataset?tags=3d-stadtmodell" target="_blank">3D-Stadtmodell</a> der Stadt Zürich.</li>
 		<li>Baujahr: Gebäude- und Wohnungsregister der Stadt Zürich</li>
-		<li>Hintergrundkarte und Gelände: (siehe 3D-Karte unten)</li>
+		<li>Hintergrundkarte und Gelände: siehe Kartenfenster unten</li>
 	  </ul>
 	</ul>
 	Die Stadt Zürich kann nicht dafür einstehen, dass diese elektronisches Informationsangebot sowie die angebotenen Funktionalitäten jederzeit störungsfrei benutzt und die abgefragten Informationen reibungslos und fehlerfrei übertragen werden können.
@@ -278,20 +278,21 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
     <span class="esri-icon-close" id="close3"></span>
     <h2>Nutzungshinweise</h2>
     <h3> Was ist das für eine Anwendung?</h3>
-    <p>Die Webapplikation zeigt eine gesamtstädtische Übersicht aller bestehenden und einige der geplanten Hochhäuser. Sie wurde als Grundlage für die Überprüfung und Aktualisierung der Hochausrichtlinien und –gebiete erstellt.
+    <p>Die Anwendung zeigt eine gesamtstädtische Übersicht aller bestehenden und einige der geplanten Hochhäuser. Sie wurde als Grundlage für die Überprüfung und Aktualisierung der Hochhausrichtlinien und -gebiete erstellt.
       Die Anwendung umfasst ein interaktives 3D-Kartentool, welches mit einem Diagramm zu Höhe und Baujahr der Gebäude verknüpft ist.<br>
       <br>
-      Datengrundlage bilden die Gebäude aus dem <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html">3D-Stadtmodell</a> der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich.
-      Zusätzlich können die aktuellen Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html">BZO2016</a>) ein- und ausgeblendet werden.
       </p>
 	<h3>Was sind Hochhäuser?</h3>
-	<p>Gemäss kantonalem Planungs- und Baugesetz (§ 282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
+  <p>Gemäss kantonalem Planungs- und Baugesetz (§ 282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
+  <h4>Welche Hochhäuser sind dargestellt?</h4>
+  Datengrundlage bilden die Gebäude aus dem <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html" target="_blank">3D-Stadtmodell</a> der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich.
+  Zusätzlich können die Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html" target="_blank">BZO2016</a>) ein- und ausgeblendet werden.
 	<h3>Wie nutze ich die Anwendung?</h3>
-	<p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter, Microsoft Edge Version 17 oder älter und Mozilla Firefox funktioniert diese Anwendung möglicherweise nicht einwandfrei. Benutzen Sie in einem solchen Fall einen anderen Browser wie beispielsweise Google Chrome oder Apple Safari.</p>
+	<p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter, Microsoft Edge Version 17 oder älter funktioniert diese Anwendung möglicherweise nicht einwandfrei. Benutzen Sie in einem solchen Fall einen anderen Browser wie beispielsweise Google Chrome, Apple Safari oder Mozilla Firefox.</p>
 	<h4>Navigation</h4>
 	<p>Mit dem Scrollrad der Computermaus kann in die Webszene rein- und rausgezoomt werden. Um die Ansicht nach links und rechts bzw. nach vorne und hinten zu verschieben, wird die gedrückte linke Maustaste verwendet. Mit der gedrückten rechten Maustaste kann die Ansicht gedreht werden.</p>
 	<h4>Selektion</h4>
-	<p>Die blau eingefärbten Gebäude können mit einem Mausklick selektiert werden. Im oben rechts erscheinenden Fenster wird - falls vorhanden - der Name des Hochhauses, die Höhenangabe sowie das Baujahr eingeblendet. Die Hochhäuser können zudem auch über die blauen Punkte im untenstehenden Diagramm ausgewählt werden: Mit einem Klick auf einen beliebigen Punkt wird das entsprechende Hochhaus auf der Karte gelb hervorgehoben.</p>
+	<p>Die blau eingefärbten Gebäude können mit einem Mausklick selektiert werden. Im erscheinenden Fenster wird - falls vorhanden - der Name des Hochhauses, die Höhenangabe sowie das Baujahr eingeblendet. Die Hochhäuser können auch über die blauen Punkte im untenstehenden Diagramm ausgewählt werden: Mit einem Klick auf einen beliebigen Punkt wird das entsprechende Hochhaus auf der Karte gelb hervorgehoben.</p>
 	<h4>Diagramm</h4>
 	<p>Neben der oben beschriebenen Selektion von Punkten bzw. Hochhäusern bietet das Diagramm weitere Funktionalitäten:
 	<ul>

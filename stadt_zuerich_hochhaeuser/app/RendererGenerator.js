@@ -60,8 +60,8 @@ define([
               },
 			    edges: {
                 type: "solid",
-                size: 1.2,
-                color: [50, 50, 50, 0.5]
+                size: 1,
+                color: [0, 0, 0, 0.5]
 			  }
             })]
           })
@@ -73,7 +73,12 @@ define([
 
       var symbol = new MeshSymbol3D({
         symbolLayers: [ new FillSymbol3DLayer({
-          material: { color: this.defaultColor}
+          material: { color: this.defaultColor},
+          edges: {
+            type: "solid",
+            size: 1,
+            color: [0, 0, 0, 0.5]
+          }
         })]
       });
 
@@ -99,14 +104,14 @@ define([
           field = "top20";
         }
         renderer.visualVariables = [{
-          type: "opacity",
+          type: "color",
           field: field,
           stops: [{
             value: 0,
-            opacity: 0.2
+            color: this.defaultColor
           }, {
             value: 1,
-            opacity: 1
+            color: [000, 112, 188]
           }]
         }];
       }
@@ -132,10 +137,10 @@ define([
             },
             callout: {
               type: "line",
-              size: 1,
+              size: 5,
               color: [50, 50, 50],
               border: {
-                color: [255, 255, 255]
+                color: [255, 0, 0]
               }
             }
           })
