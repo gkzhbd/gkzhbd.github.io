@@ -247,6 +247,42 @@ define([
 
     // on hover add information about the building and a circle that acts like a highlight
     hover: function(d) {
+      var elem = d3.select("#id-" + d.attributes.objectid);
+      var cx = parseInt(elem.attr("cx"), 10),
+        cy = parseInt(elem.attr("cy"), 10);
+      this.hoverContainer.append("line")
+        .attr("class", "hover-graphic")
+        .attr("x1", cx)
+        .attr("y1", cy - 4)
+        .attr("x2", cx)
+        .attr("y2", cy - 15)
+        .style("stroke", "#000");
+      this.hoverContainer.append("circle")
+        .attr("class", "hover-graphic")
+        .attr("r", 8)
+        .attr("cx", parseInt(elem.attr("cx"), 10))
+        .attr("cy", parseInt(elem.attr("cy"), 10))
+        .attr("stroke-width", 4)
+        .attr("stroke", this.highlightColor)
+        .attr("fill", "none");
+      var rect = this.hoverContainer.append("rect")
+        .attr("class", "hover-graphic");
+      var text = this.hoverContainer.append("text")
+        .attr("class", "tooltip")
+        .classed("hover-graphic", true)
+        .attr("x", cx)
+        .attr("y", cy - 21)
+        .attr("text-anchor", "end")
+        .text(function() {
+          var a = d.attributes;
+          var name = a.name !== " " ? a.name : "Building " + a.name;
+          return name + " gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + " m";
+        });
+      var bbox = text.node().getBBox();
+
+      //Codesnippet für zweizeilige Popups im HeightDiagramm. Deaktiviert, da nicht mit Firefox kompatibel
+
+      /*hover: function(d) {
         var elem = d3.select("#id-" + d.attributes.objectid);
         var cx = parseInt(elem.attr("cx"), 10),
           cy = parseInt(elem.attr("cy"), 10);
@@ -288,7 +324,7 @@ define([
             var a = d.attributes;
             return "gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + "m";
           });
-        var bbox = text.node().getBBox();
+        var bbox = text.node().getBBox();*/
 
         rect.attr("x", bbox.x - 4)
           .attr("y", bbox.y - 4)

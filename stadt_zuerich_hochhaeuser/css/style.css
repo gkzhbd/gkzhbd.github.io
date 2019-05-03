@@ -393,12 +393,6 @@ path.domain, .tick line {
   padding: 10px;
 }
 
-#impressumContainer a, #logo a, #impressumLink a, #RechtContainer a {
-  font-weight: bold;
-  color: inherit;
-  text-decoration: none;
-}
-
 #impressumLink {
   position: absolute;
   left: 10px;
@@ -483,5 +477,4 @@ margin-top: 3px;
 margin-bottom: 3px;
 margin-left: 26px;
 }
-
 
