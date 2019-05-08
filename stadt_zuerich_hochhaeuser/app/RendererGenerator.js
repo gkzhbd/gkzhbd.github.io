@@ -76,8 +76,8 @@ define([
           material: { color: this.defaultColor},
           edges: {
             type: "solid",
-            size: 1,
-            color: [0, 0, 0, 0.5]
+            size: 0.5,
+            color: [50, 50, 50, 0.3]
           }
         })]
       });
@@ -90,6 +90,22 @@ define([
 
       this.applyCategory(this.state.selectedCategory);
     },
+
+    /*applyCategory: function(category) {
+      var field, renderer = this.layer.renderer.clone();
+        renderer.visualVariables = [{
+          type: "color",
+          field: "CNSTRCT_YR",
+          stops: [{
+            value: 2018,
+            color: this.defaultColor
+          }, {
+            value: 2019,
+            color: [255, 255, 000]
+          }]
+        }];
+      this.layer.renderer = renderer;
+    },*/
 
     applyCategory: function(category) {
       var field, renderer = this.layer.renderer.clone();

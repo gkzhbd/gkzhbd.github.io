@@ -377,28 +377,29 @@ define([
       });
     },
 
-    // change the size and opacity of points when a category is selected
+    // change the points when a category is selected
     applyCategory: function(newCategory){
       if (newCategory === "all") {
-        this.circles.attr("copacity", 1)
-          .attr("r", 4);
+        this.circles.attr("fill", "rgba(000, 112, 188, 0.8)")
+          .attr("r", 4)
+          .attr("opacity", 1);
       }
       else {
         var property = (newCategory === "info") ? "wohnhochhaus" : "top20";
-        this.circles.attr("opacity", function(d) {
+        this.circles.attr("fill", function(d) {
           if (d.attributes[property] === 1) {
-            return 1;
+            return "rgba(000, 112, 188, 0.8)";
           }
           else {
-            return 0;
+            return "rgba(255, 255, 255, 0.5)";
           }
         })
-        /*.attr("r", function(d) {
+        /*.attr("opacity", function(d) {
           if (d.attributes[property] === 1) {
-            return 4;
+            return 1;
           }
           else {
-            return 1;
+            return 0.5;
           }
         });*/
       }
