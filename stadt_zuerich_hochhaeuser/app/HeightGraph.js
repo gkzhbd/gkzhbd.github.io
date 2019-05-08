@@ -380,7 +380,7 @@ define([
     // change the size and opacity of points when a category is selected
     applyCategory: function(newCategory){
       if (newCategory === "all") {
-        this.circles.attr("opacity", 1)
+        this.circles.attr("copacity", 1)
           .attr("r", 4);
       }
       else {
@@ -390,17 +390,17 @@ define([
             return 1;
           }
           else {
-            return 0.2;
+            return 0;
           }
         })
-        .attr("r", function(d) {
+        /*.attr("r", function(d) {
           if (d.attributes[property] === 1) {
             return 4;
           }
           else {
             return 1;
           }
-        });
+        });*/
       }
     }
   });

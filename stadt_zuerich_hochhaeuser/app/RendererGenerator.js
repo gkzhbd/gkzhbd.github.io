@@ -118,6 +118,19 @@ define([
       this.layer.renderer = renderer;
     },
 
+    /*ProjectedBuildings: function() {
+      renderer = this.layer.renderer.clone();
+      renderer.visualVariables = [{
+        type: "color",
+        field: "CNSTRCT_YR"
+        stops: [{
+          value: 2019,
+          color: [255, 255, 0]
+        }]
+      }]
+    }*/
+
+
     createUniqueValueRenderer: function(field, uniqueValues) {
 
       return new UniqueValueRenderer({

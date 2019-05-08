@@ -145,7 +145,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
         initPeriod: [true, true, true, true, true],
         categories: [{
           value: "all",
-          text: "Alle Gebäude anzeigen"
+          text: "Alle Hochhäuser"
         }, {
           value: "info",
           text: "Wohnhochhäuser"
@@ -153,9 +153,9 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
           value: "top",
           text: "Höchste 20 Gebäude"
         }],
-		infoPointsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_InfoPunkte_20190328_neu/FeatureServer",
+		infoPointsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_InfoPunkte_20190431/FeatureServer",
         initCategory: "all",
-        buildingsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_ZuSE_20190328_neu/SceneServer"
+        buildingsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_ZuSE_20190431/SceneServer"
       };
 
       // initialize application
@@ -245,15 +245,15 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
 <div id="RechtContainer">
     <span class="esri-icon-close" id="close1"></span>
     <h2>Rechtliche Hinweise</h2>
-    <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung "Manhattan Skyscraper Explorer" von <a href="https://github.com/RalucaNicola/JSAPI_demos" target="_blank">Raluca Nicola</a> erstellt. Der Code dieser Anwendung ist Open Source.
+    <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung "Manhattan Skyscraper Explorer" von <a href="https://github.com/RalucaNicola/JSAPI_demos" target="_blank">Raluca Nicola</a> erstellt. Der Code dieser Anwendung ist Open Source und auf <a href="https://github.com/gkzhbd/gkzhbd.github.io" target="_blank">Github</a> verfügbar.
 	<br><br> Folgende Bibliotheken, APIs und Datensätze werden genutzt:
     <ul>
       <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.7</a></li>
       <li>Diagramm: <a href="https://d3js.org/" target="_blank">D3Js</a> </li>
       <li>Daten: 
 	  <ul>
-		<li>3D-Gebäudedaten: <a href="https://data.stadt-zuerich.ch/dataset?tags=3d-stadtmodell" target="_blank">3D-Stadtmodell</a> der Stadt Zürich.</li>
-		<li>Baujahr: Gebäude- und Wohnungsregister der Stadt Zürich</li>
+		<li>3D-Gebäude: <a href="https://data.stadt-zuerich.ch/dataset?tags=3d-stadtmodell" target="_blank">3D-Stadtmodell</a> der Stadt Zürich</li>
+		<li>Baujahre: Gebäude- und Wohnungsregister der Stadt Zürich (GWZ)</li>
 		<li>Hintergrundkarte und Gelände: siehe Kartenfenster unten</li>
 	  </ul>
 	</ul>
@@ -279,14 +279,11 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
     <h2>Nutzungshinweise</h2>
     <h3> Was ist das für eine Anwendung?</h3>
     <p>Die Anwendung zeigt eine gesamtstädtische Übersicht aller bestehenden und einige der geplanten Hochhäuser. Sie wurde als Grundlage für die Überprüfung und Aktualisierung der Hochhausrichtlinien und -gebiete erstellt.
-      Die Anwendung umfasst ein interaktives 3D-Kartentool, welches mit einem Diagramm zu Höhe und Baujahr der Gebäude verknüpft ist.<br>
-      <br>
-      </p>
+      Die Anwendung umfasst ein interaktives 3D-Kartentool, welches mit einem Diagramm zu Höhe und Baujahr der Gebäude verknüpft ist.</p>
 	<h3>Was sind Hochhäuser?</h3>
-  <p>Gemäss kantonalem Planungs- und Baugesetz (§ 282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
-  <h4>Welche Hochhäuser sind dargestellt?</h4>
-  Datengrundlage bilden die Gebäude aus dem <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html" target="_blank">3D-Stadtmodell</a> der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich.
-  Zusätzlich können die Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html" target="_blank">BZO2016</a>) ein- und ausgeblendet werden.
+  <p>Gemäss kantonalem Planungs- und Baugesetz (§282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
+  <h3>Welche Hochhäuser sind dargestellt?</h3>
+  Datengrundlage bilden die Gebäude aus dem <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html" target="_blank">3D-Stadtmodell</a> der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich. Farblich hervorgehoben und im Diagramm dargestellt, werden Hochhäuser mit Baujahr ab 1900. Einige geplante Hochhäuser werden mit einem fiktiven Baujahr zwischen 2020 und 2024 angezeigt. Zusätzlich können die Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html" target="_blank">BZO 2016</a>) ein- und ausgeblendet werden.
 	<h3>Wie nutze ich die Anwendung?</h3>
 	<p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter, Microsoft Edge Version 17 oder älter funktioniert diese Anwendung möglicherweise nicht einwandfrei. Benutzen Sie in einem solchen Fall einen anderen Browser wie beispielsweise Google Chrome, Apple Safari oder Mozilla Firefox.</p>
 	<h4>Navigation</h4>
@@ -297,7 +294,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
 	<p>Neben der oben beschriebenen Selektion von Punkten bzw. Hochhäusern bietet das Diagramm weitere Funktionalitäten:
 	<ul>
 		<li>Zur gezielten Ein- und Ausblendung der Hochhäuser aus bestimmten Epochen können die untenstehenden Schaltflächen mit den Jahreszahlen verwendet werden.</li>
-		<li>Die rechtsstehenden Schaltflächen ermöglichen es, nur Wohnhochhäuser oder die höchsten 20 Gebäude anzuzeigen lassen.</li>
+		<li>Die rechtsstehenden Schaltflächen ermöglichen es, nur Wohnhochhäuser (Wohnanteil in Obergeschossen ≥ 90%) oder die höchsten 20 Gebäude anzeigen zu lassen.</li>
 		<li>Der obere und der untere Rand vom Diagramm lassen sich mit der linken Maustaste verschieben. So ist es möglich die Anzeige der Gebäude auf bestimmte Höhen zu begrenzen.</li>
 	</ul>
   </div>
