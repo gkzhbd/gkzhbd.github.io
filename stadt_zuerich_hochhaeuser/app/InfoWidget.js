@@ -54,7 +54,7 @@ define([
       var view = this.view;
 
       // set the building name, height and construction year from the building attributes
-      var name = (attributes.name === "") ? "Hochhaus" : attributes.name;
+      var name = (attributes.name === "" || attributes.name === null || attributes.name === "baulicher Akzent") ? "Hochhaus" : attributes.name;
       view.popup.content = "<h3>" + name  + "</h3>"
       + "<p class='info'> <img src='./img/height.png'> " + Math.round(attributes.heightroof) + " Meter"
       + "<img src='./img/construction.png'> " + attributes.cnstrct_yr + "</p>"

@@ -275,7 +275,7 @@ define([
         .attr("text-anchor", "end")
         .text(function() {
           var a = d.attributes;
-          var name = a.name !== " " ? a.name : "Building " + a.name;
+          var name = a.name === "baulicher Akzent"  || a.name === null ? " " : a.name;
           return name + " gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + " m";
         });
       var bbox = text.node().getBBox();
