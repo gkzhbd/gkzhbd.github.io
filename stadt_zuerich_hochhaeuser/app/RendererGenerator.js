@@ -76,8 +76,8 @@ define([
           material: { color: this.defaultColor},
           edges: {
             type: "solid",
-            size: 0.5,
-            color: [50, 50, 50, 0.3]
+            size: 1,
+            color: [0, 0, 0, 0.5]
           }
         })]
       });

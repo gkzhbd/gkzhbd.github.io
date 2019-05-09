@@ -391,17 +391,17 @@ define([
             return "rgba(000, 112, 188, 0.8)";
           }
           else {
-            return "rgba(255, 255, 255, 0.5)";
+            return "rgba(255, 255, 255, 0)";
           }
         })
-        /*.attr("opacity", function(d) {
+        .attr("r", function(d) {
           if (d.attributes[property] === 1) {
-            return 1;
+            return 4;
           }
           else {
-            return 0.5;
+            return 0.1;
           }
-        });*/
+        });
       }
     }
   });
