@@ -186,17 +186,9 @@ define([
 		 visible: false
 	  });
 	  
-	  // Verdichtungsgebiete
-	  /*var Verdichtung = new FeatureLayer({
-		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/AUFZONUNGSGEBIETE_abstrakt/FeatureServer",
-		 opacity: 0.6,
-		 visible: false
-	  });*/
-
       map.addMany([sceneLayer, infoPoints, HHGebiete/*, Verdichtung*/]);
 	  
 	  var HHGebieteToggle = dom.byId("HHGebieteLayer");
-	  //var VerdichtungToggle = dom.byId("VerdichtungLayer");
 	  
 	  // Listen to the onchange event for the checkbox
       on(HHGebieteToggle, "change", function(){
@@ -204,14 +196,7 @@ define([
 		HHGebiete.visible = HHGebieteToggle.checked;
 	  });
 	  
-	  // Listen to the onchange event for the checkbox
-      //on(VerdichtungToggle, "change", function(){
-      // When the checkbox is checked (true), set the layer's visibility to true
-	  /*Verdichtung.visible = VerdichtungToggle.checked;
-	  });*/
 
-      // add labels to display Manhattan boroughs
-      //labels.initialize("./data/zurich-boroughs.json", "name", { color: "#000" }, map);
 
       // initialize info widget
       var infoWidget = new InfoWidget(view, state);
@@ -343,13 +328,7 @@ define([
       state.watch("selectedCategory", function(newCategory) {
         rendererGen.applyCategory(newCategory);
         heightGraph.applyCategory(newCategory);
-        // make info points visible when category "Only annotated buildings" is selected
-        /* if (newCategory === "info") {
-          infoPoints.visible = true;
-        }
-        else {
-          infoPoints.visible = false;
-        } */
+
       });
 
       // when user clicks on a building, set it as the selected building in the state
@@ -417,14 +396,6 @@ define([
       on(domQuery(".esri-popup__main-container"), "mouseenter", function() {
         state.hoveredBuilding = null;
       });
-
-      // add events for disclaimer window
-      /*on(dom.byId("impressumLink"), "click", function() {
-        dom.byId("impressumContainer").style.display = "inline";
-      });
-      on(dom.byId("close"), "click", function() {
-        dom.byId("impressumContainer").style.display = "none";
-      });*/
 	  
 	  // add events for rechtliche Hinweise
       on(dom.byId("RechtLink"), "click", function() {

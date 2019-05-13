@@ -123,28 +123,6 @@ define([
           .attr("height", this.height - 43)
           .attr("width", 69); 
 
-      // handlers for filtering
-      /*var groupHandlers = svg.append("g");
-        groupHandlers.append("rect")
-        .classed("top", true)
-        .attr("x", xScale(2020))
-        .attr("y", yScale(buildingOptions.maxHeight) - 9)
-        .attr("width", 50)
-        .attr("height", 6)
-        .attr("rx", 5)
-        .attr("ry", 0)
-        .attr("cursor", "ns-resize")
-        .style("fill", "#bbb");
-      groupHandlers.append("rect")
-        .classed("bottom", true)
-        .attr("x", xScale(2020))
-        .attr("y", yScale(buildingOptions.minHeight) - 1)
-        .attr("width", 50)
-        .attr("height", 6)
-        .attr("rx", 5)
-        .attr("ry", 0)
-        .attr("cursor", "ns-resize")
-        .style("fill", "#bbb");*/
 
       // define vertical axis and append it to the svg container
       var yAxisGroup = svg.append("g")
@@ -215,10 +193,6 @@ define([
 
       // add event listeners when filters are changed
       brush.on("brush", function() {
-          /*groupHandlers.select("rect.top")
-            .attr("y", d3.event.selection[0] - 9);
-          groupHandlers.select("rect.bottom")
-            .attr("y", d3.event.selection[1] - 1);*/
           svg.select("#upper-indicator")
             .attr("y", d3.event.selection[0] - 1)
             .text(Math.round(yScale.invert(d3.event.selection[0])));

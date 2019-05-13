@@ -47,6 +47,7 @@ define([
       this.state = state;
     },
 
+// Rendering für blaue (hervorgehobene) Häuser
     createClassBreakInfos: function(selectedPeriod) {
       return this.ageClasses.map(function(e, i) {
         var color = selectedPeriod[i] ? e.color : this.defaultColor;
@@ -69,6 +70,7 @@ define([
       }.bind(this));
     },
 
+// Rendering für nicht hervorgehobene Häuser
     applyClassBreaksRenderer: function(selectedPeriod) {
 
       var symbol = new MeshSymbol3D({
@@ -107,6 +109,7 @@ define([
       this.layer.renderer = renderer;
     },*/
 
+  //Spezialrenderer fuer Kategorieauswahl (rechter Rand). Falls Button gewählt wird, werden die oberen Renderer entsprechend den Einstellung des Spezialrenderers übersteuert.
     applyCategory: function(category) {
       var field, renderer = this.layer.renderer.clone();
       if (category === "all") {
