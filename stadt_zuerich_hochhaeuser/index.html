@@ -126,6 +126,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
       var settings = {
          ageClasses: [
           { minValue: 1900, maxValue: 1924, color: [000, 112, 188] },
+          { minValue: 1900, maxValue: 1924, color: [000, 112, 188] },
           { minValue: 1925, maxValue: 1949, color: [000, 112, 188] },
           { minValue: 1950, maxValue: 1974, color: [000, 112, 188] },
           { minValue: 1975, maxValue: 1999, color: [000, 112, 188] },
@@ -139,7 +140,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
         buildingOptions: {
           minHeight: 0,
           maxHeight: 150,
-          minCnstrctYear: 1900,
+          minCnstrctYear: 1000,
           maxCnstrctYear: 2024
         },
         initPeriod: [true, true, true, true, true],
@@ -153,6 +154,9 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
         }, {
           value: "top",
           text: "Höchste 20 Gebäude"
+        },{
+          value: "geplant",
+          text: "Geplante Hochhäuser"
         }],
 		infoPointsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_InfoPunkte_20190509/FeatureServer",
         initCategory: "all",
@@ -224,9 +228,9 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
 <div id="RechtContainer">
     <span class="esri-icon-close" id="close1"></span>
     <h2>Rechtliche Hinweise</h2>
-    <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung "Manhattan Skyscraper Explorer" 
-      von <a href="https://github.com/RalucaNicola/JSAPI_demos" target="_blank">Raluca Nicola</a> erstellt.
-      Der Code dieser Anwendung ist Open Source und auf <a href="https://github.com/gkzhbd/gkzhbd.github.io" target="_blank">Github</a> verfügbar.
+    <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung 
+      <a href="https://github.com/Esri/Manhattan-skyscraper-explorer" target="_blank">"Manhattan Skyscraper Explorer"</a> von Raluca Nicola erstellt.
+      Der Code dieser Anwendung ist Open Source und auf <a href="https://github.com/gkzhbd/gkzhbd.github.io/tree/master/stadt_zuerich_hochhaeuser" target="_blank">Github</a> verfügbar.
 	<br><br> Folgende Bibliotheken, APIs und Datensätze werden genutzt:
     <ul>
       <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.7</a></li>

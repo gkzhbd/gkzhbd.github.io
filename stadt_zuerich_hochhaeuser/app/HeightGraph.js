@@ -52,7 +52,7 @@ define([
       // create scales
       var buildingOptions = settings.buildingOptions;
       var xScale = d3.scaleLinear()
-        .domain([buildingOptions.minCnstrctYear - 1, buildingOptions.maxCnstrctYear])
+        .domain([/*buildingOptions.minCnstrctYear - 1*/ 1899, buildingOptions.maxCnstrctYear])
         .range([this.paddingLeft, this.width]);
       var yScale = d3.scaleLinear()
         .domain([0, buildingOptions.maxHeight])
@@ -140,7 +140,22 @@ define([
         .data(features)
         .enter()
         .append("circle")
-        .attr("r", 4)
+        .attr("r",  function(d) {
+          if (d.attributes.cnstrct_yr < 1900) {
+            return 1
+          }
+          else {
+            return 4
+          };
+        })
+        .attr("opacity",  function(d) {
+          if (d.attributes.cnstrct_yr < 1900) {
+            return 0
+          }
+          else {
+            return 1
+          };
+        })
         .attr("class", function(d) {
           var value;
           settings.ageClasses.forEach(function(e, i) {
@@ -221,6 +236,7 @@ define([
 
     // on hover add information about the building and a circle that acts like a highlight
     hover: function(d) {
+      if (d.attributes.cnstrct_yr > 1899) {
       var elem = d3.select("#id-" + d.attributes.objectid);
       var cx = parseInt(elem.attr("cx"), 10),
         cy = parseInt(elem.attr("cy"), 10);
@@ -249,7 +265,7 @@ define([
         .attr("text-anchor", "end")
         .text(function() {
           var a = d.attributes;
-          var name = a.name === "baulicher Akzent"  || a.name === null ? " " : a.name;
+          var name = a.name === "baulicher Akzent"  || a.name === null || a.name === "St.-Jakobs-Kirche (Zürich)" || (a.name === "Kirche" && a.cnstrct_yr === 1900) ? " " : a.name; //Gebäude mit Nullwert, "baulicher Akzent" oder "St.-Jakobs-Kirche (Zürich)" im Namensfeld werden ignoriert bei der Beschriftung der tooltips im Diagramm
           return name + " gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + " m";
         });
       var bbox = text.node().getBBox();
@@ -306,6 +322,7 @@ define([
           .attr("height", bbox.height + 8)
           .style("fill", "#ddd")
           .style("fill-opacity", ".9");
+        }
     },
 
     // remove circle that acts like a highlight on hover
@@ -315,6 +332,7 @@ define([
 
     // add a circle that will act like a highlight when a circle is clicked on
     select: function(d) {
+      if (d.attributes.cnstrct_yr > 1899) {
       var elem = d3.select("#id-" + d.attributes.objectid);
       this.selectContainer.append("circle")
         .attr("class", "selectedGraphic")
@@ -324,6 +342,7 @@ define([
         .attr("stroke-width", 4)
         .attr("stroke", this.highlightColor)
         .attr("fill", "none");
+      }
     },
 
     // remove circle that acts like a selection highlight
@@ -355,9 +374,35 @@ define([
     applyCategory: function(newCategory){
       if (newCategory === "all") {
         this.circles.attr("fill", "rgba(000, 112, 188, 0.8)")
-          .attr("r", 4)
-          .attr("opacity", 1);
+          .attr("r",  function(d) {
+            if (d.attributes.cnstrct_yr < 1900) {
+              return 1
+            }
+            else {
+              return 4
+            };
+          })
+          .attr("opacity",  function(d) {
+            if (d.attributes.cnstrct_yr < 1900) {
+              return 0
+            }
+            else {
+              return 1
+            };
+          });
       }
+      else if (newCategory === "geplant") {
+        var property = "cnstrct_yr";
+        this.circles.attr("fill", function(d) {
+          if (d.attributes[property] > 2019) {
+            return "rgba(71, 181, 255, 0.8)";
+          }
+          else {
+            return "rgba(000, 112, 188, 0.8)";
+          }
+        })
+        .attr("r", 4);
+    }
       else {
         var property = (newCategory === "info") ? "wohnhochhaus" : "top20";
         this.circles.attr("fill", function(d) {

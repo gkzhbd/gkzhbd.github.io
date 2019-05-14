@@ -47,7 +47,7 @@ define([
       this.state = state;
     },
 
-// Rendering für blaue (hervorgehobene) Häuser
+// Rendering für Häuser im HeightGraph
     createClassBreakInfos: function(selectedPeriod) {
       return this.ageClasses.map(function(e, i) {
         var color = selectedPeriod[i] ? e.color : this.defaultColor;
@@ -55,7 +55,7 @@ define([
           minValue: e.minValue,
           maxValue: e.maxValue,
           symbol: new MeshSymbol3D({
-            symbolLayers: [ new FillSymbol3DLayer({
+            symbolLayers: [new FillSymbol3DLayer({
               material: {
                 color: color
               },
@@ -76,11 +76,11 @@ define([
       var symbol = new MeshSymbol3D({
         symbolLayers: [ new FillSymbol3DLayer({
           material: { color: this.defaultColor},
-          edges: {
+          /*edges: {
             type: "solid",
             size: 1,
             color: [0, 0, 0, 0.5]
-          }
+          }*/
         })]
       });
 
@@ -114,6 +114,25 @@ define([
       var field, renderer = this.layer.renderer.clone();
       if (category === "all") {
         renderer.visualVariables = null;
+      }
+      else if (category === "geplant") {
+        renderer.visualVariables = [{
+          type: "color",
+          field: "CNSTRCT_YR",
+          stops: [{
+            value: 1,
+            color: this.defaultColor
+          },{
+            value: 2,
+            color: [000, 112, 188]
+          },{
+            value: 2019,
+            color: [000, 112, 188]
+          },{
+            value: 2020,
+            color: [71, 181, 255]
+          }]
+        }];
       }
       else {
         if (category === "info") {
@@ -150,7 +169,7 @@ define([
     }*/
 
 
-    createUniqueValueRenderer: function(field, uniqueValues) {
+    /*createUniqueValueRenderer: function(field, uniqueValues) {
 
       return new UniqueValueRenderer({
         field: field,
@@ -178,7 +197,7 @@ define([
           })
         }]
       });
-    }
+    }*/
 
   });
 });

@@ -174,8 +174,8 @@ define([
         featureReduction: {
           type: "selection"
         },
-        renderer: rendererGen.createUniqueValueRenderer("WIKI", {value: 1, image: "./img/wiki.png"}),
-        visible: false,
+        //renderer: rendererGen.createUniqueValueRenderer("WIKI", {value: 1, image: "./img/wiki.png"}),
+        //visible: false,
 		definitionExpression: "(GEBAEUDETYP = 'Hochhaus PBG' OR GEBAEUDETYP = 'Hochhaus Studie') AND CNSTRCT_YR >= " + settings.buildingOptions.minCnstrctYear + " AND CNSTRCT_YR <= " + settings.buildingOptions.maxCnstrctYear
       });
 	  
@@ -186,7 +186,7 @@ define([
 		 visible: false
 	  });
 	  
-      map.addMany([sceneLayer, infoPoints, HHGebiete/*, Verdichtung*/]);
+      map.addMany([sceneLayer/*, infoPoints*/, HHGebiete/*, Verdichtung*/]);
 	  
 	  var HHGebieteToggle = dom.byId("HHGebieteLayer");
 	  
@@ -206,7 +206,7 @@ define([
 
       // create a query on the infoPoints layer to get all the buildings that will be displayed in the height graph
       var query = infoPoints.createQuery();
-      query.outFields = ["OBJECTID", "NAME", "HEIGHTROOF", "CNSTRCT_YR", "WIKI", "TOP20", "GEBAEUDETYP", "WOHNHOCHHAUS", "EGID"];
+      query.outFields = ["OBJECTID", "NAME", "HEIGHTROOF", "CNSTRCT_YR", "TOP20", "GEBAEUDETYP", "WOHNHOCHHAUS", "EGID"];
       query.returnGeometry = true;
       infoPoints.queryFeatures(query)
         .then(initGraphics)
