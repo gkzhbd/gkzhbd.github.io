@@ -35,10 +35,15 @@ define([
     constructor: function(container, settings, state) {
 
       this.settings = settings;
-
       for (var i = 0; i < settings.initPeriod.length; i++) {
-        var button = domCtr.create("button", {id: "period-" + i, innerHTML: settings.ageClasses[i].minValue + " - " + settings.ageClasses[i].maxValue}, dom.byId(container));
+        if (i===0) {
+        var button = domCtr.create("button", {id: "period-" + i, innerHTML:  "vor 1900"}, dom.byId(container));
         on(button, "click", togglePeriod(i));
+        } //if-Funktion zur richtigen 
+        else {
+          button = domCtr.create("button", {id: "period-" + i, innerHTML: settings.ageClasses[i].minValue + " - " + settings.ageClasses[i].maxValue}, dom.byId(container));
+          on(button, "click", togglePeriod(i));
+          }
       }
       function togglePeriod(j) {
         return function() {
