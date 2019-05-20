@@ -33,13 +33,22 @@ define([
   return declare(null, {
 
     constructor: function(container, settings, state) {
-
+      //Erstellung und Beschriftung der Button. if-Funktion zur Beschriftung des ersten, "vor 1900"-Buttons. 
       this.settings = settings;
-
       for (var i = 0; i < settings.initPeriod.length; i++) {
-        var button = domCtr.create("button", {id: "period-" + i, innerHTML: settings.ageClasses[i].minValue + " - " + settings.ageClasses[i].maxValue}, dom.byId(container));
-        on(button, "click", togglePeriod(i));
+        if (i===0) {
+          var button = domCtr.create("button", {id: "period-" + i, innerHTML:  "vor 1900"}, dom.byId(container));
+          on(button, "click", togglePeriod(i));
+          /*var Pfeil = domCtr.create("button", {id: "Pfeil"}, dom.byId(container));
+          on(Pfeil, "click", togglePeriod(i));*/
+        } 
+        else {
+          button = domCtr.create("button", {id: "period-" + i, innerHTML: settings.ageClasses[i].minValue + " - " + settings.ageClasses[i].maxValue}, dom.byId(container));
+          on(button, "click", togglePeriod(i));
+          }
       }
+
+
       function togglePeriod(j) {
         return function() {
           var newPeriod = [];
@@ -48,16 +57,42 @@ define([
           }
           state.selectedPeriod = newPeriod;
         };
-      }
+      } 
     },
 
     update: function(newPeriod) {
       var buttonStyle;
-      for (var i = 0; i < newPeriod.length; i++) {
-        buttonStyle = dom.byId("period-" + i).style;
-        buttonStyle.backgroundColor = newPeriod[i] ? "rgb(" + this.settings.ageClasses[i].color.join(",") + ")" : "rgba(" + this.settings.defaultColor.join(",") + ")";
-        buttonStyle.color = newPeriod[i] ? "#fff" : "#777";
+        for (var i = 0; i < newPeriod.length; i++) {
+          if (i===0)  {
+            buttonStyle = dom.byId("period-" + i).style;
+            buttonStyle.backgroundColor = newPeriod[i] ? "rgb(" + this.settings.ageClasses[i].color.join(",") + ")" : "rgba(" + this.settings.defaultColor.join(",") + ")";
+            buttonStyle.color = newPeriod[i] ? "#fff" : "#777";
+          }
+          else {
+            buttonStyle = dom.byId("period-" + i).style;
+            buttonStyle.backgroundColor = newPeriod[i] ? "rgb(" + this.settings.ageClasses[i].color.join(",") + ")" : "rgba(" + this.settings.defaultColor.join(",") + ")";
+            buttonStyle.color = newPeriod[i] ? "#fff" : "#777";
+          }
+        }
+      
+    },
+
+    //Deaktivierung des Zeitselektion bei aktivierten Category-Buttons
+    /*applyCategory: function(selectedCategory) {
+      if (selectedCategory !== "all") {
+        for (var i = 0; i < 6; i++) {
+          buttonStyle = dom.byId("period-" + i).style;
+          buttonStyle.backgroundColor = "rgb(" + this.settings.ageClasses[i].color.join(",") + ")";
+          buttonStyle.color = "#fff";
+        }
       }
-    }
+      else {
+        for (var i = 0; i < 6; i++) {
+          buttonStyle = dom.byId("period-" + i).style;
+          buttonStyle.backgroundColor = newPeriod[i] ? "rgb(" + this.settings.ageClasses[i].color.join(",") + ")" : "rgba(" + this.settings.defaultColor.join(",") + ")";
+          buttonStyle.color = newPeriod[i] ? "#fff" : "#777";
+        }
+      }
+    }*/
   });
 });

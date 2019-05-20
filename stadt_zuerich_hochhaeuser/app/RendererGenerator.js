@@ -47,6 +47,7 @@ define([
       this.state = state;
     },
 
+    // Definiton für das Rendering der hervorgehobenen Häusern
     createClassBreakInfos: function(selectedPeriod) {
       return this.ageClasses.map(function(e, i) {
         var color = selectedPeriod[i] ? e.color : this.defaultColor;
@@ -54,23 +55,24 @@ define([
           minValue: e.minValue,
           maxValue: e.maxValue,
           symbol: new MeshSymbol3D({
-            symbolLayers: [ new FillSymbol3DLayer({
+            symbolLayers: [new FillSymbol3DLayer({
               material: {
                 color: color
               },
-			    edges: {
+			        edges: {
                 type: "solid",
                 size: 1,
                 color: [0, 0, 0, 0.5]
-			  }
+			        }
             })]
           })
         };
       }.bind(this));
     },
 
+    // Rendering
     applyClassBreaksRenderer: function(selectedPeriod) {
-
+      //Generelles Rendering
       var symbol = new MeshSymbol3D({
         symbolLayers: [ new FillSymbol3DLayer({
           material: { color: this.defaultColor},
@@ -81,14 +83,19 @@ define([
           }
         })]
       });
+      
+      
+      
 
+      //Rendering für hervorgehobene Häuser, Definition von oben wird angewandt
       this.layer.renderer = new ClassBreaksRenderer({
         field: this.field,
         defaultSymbol: symbol,
         classBreakInfos: this.createClassBreakInfos(selectedPeriod)
       });
 
-      this.applyCategory(this.state.selectedCategory);
+
+      this.applyCategory(this.state.selectedCategory, this.state.selectedPeriod);
     },
 
     /*applyCategory: function(category) {
@@ -107,11 +114,31 @@ define([
       this.layer.renderer = renderer;
     },*/
 
+  //Spezialrenderer fuer Kategorieauswahl (rechter Rand). Falls Button gewählt wird, werden die oberen Renderer entsprechend den Einstellung des Spezialrenderers übersteuert.
     applyCategory: function(category) {
       var field, renderer = this.layer.renderer.clone();
       if (category === "all") {
         renderer.visualVariables = null;
       }
+      /*else if (category === "geplant") {
+        renderer.visualVariables = [{
+          type: "color",
+          field: "CNSTRCT_YR",
+          stops: [{
+            value: 1,
+            color: this.defaultColor
+          },{
+            value: 2,
+            color: [000, 112, 188]
+          },{
+            value: 2019,
+            color: [000, 112, 188]
+          },{
+            value: 2020,
+            color: [71, 181, 255]
+          }]
+        }];
+      }*/
       else {
         if (category === "info") {
           field = "wohnhochhaus";
@@ -147,7 +174,7 @@ define([
     }*/
 
 
-    createUniqueValueRenderer: function(field, uniqueValues) {
+    /*createUniqueValueRenderer: function(field, uniqueValues) {
 
       return new UniqueValueRenderer({
         field: field,
@@ -175,7 +202,7 @@ define([
           })
         }]
       });
-    }
+    }*/
 
   });
 });

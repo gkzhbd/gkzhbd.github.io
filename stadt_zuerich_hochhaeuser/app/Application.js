@@ -174,8 +174,8 @@ define([
         featureReduction: {
           type: "selection"
         },
-        renderer: rendererGen.createUniqueValueRenderer("WIKI", {value: 1, image: "./img/wiki.png"}),
-        visible: false,
+        //renderer: rendererGen.createUniqueValueRenderer("WIKI", {value: 1, image: "./img/wiki.png"}),
+        //visible: false,
 		definitionExpression: "(GEBAEUDETYP = 'Hochhaus PBG' OR GEBAEUDETYP = 'Hochhaus Studie') AND CNSTRCT_YR >= " + settings.buildingOptions.minCnstrctYear + " AND CNSTRCT_YR <= " + settings.buildingOptions.maxCnstrctYear
       });
 	  
@@ -186,17 +186,9 @@ define([
 		 visible: false
 	  });
 	  
-	  // Verdichtungsgebiete
-	  /*var Verdichtung = new FeatureLayer({
-		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/AUFZONUNGSGEBIETE_abstrakt/FeatureServer",
-		 opacity: 0.6,
-		 visible: false
-	  });*/
-
-      map.addMany([sceneLayer, infoPoints, HHGebiete/*, Verdichtung*/]);
+      map.addMany([sceneLayer/*, infoPoints*/, HHGebiete/*, Verdichtung*/]);
 	  
 	  var HHGebieteToggle = dom.byId("HHGebieteLayer");
-	  //var VerdichtungToggle = dom.byId("VerdichtungLayer");
 	  
 	  // Listen to the onchange event for the checkbox
       on(HHGebieteToggle, "change", function(){
@@ -204,14 +196,7 @@ define([
 		HHGebiete.visible = HHGebieteToggle.checked;
 	  });
 	  
-	  // Listen to the onchange event for the checkbox
-      //on(VerdichtungToggle, "change", function(){
-      // When the checkbox is checked (true), set the layer's visibility to true
-	  /*Verdichtung.visible = VerdichtungToggle.checked;
-	  });*/
 
-      // add labels to display Manhattan boroughs
-      //labels.initialize("./data/zurich-boroughs.json", "name", { color: "#000" }, map);
 
       // initialize info widget
       var infoWidget = new InfoWidget(view, state);
@@ -221,7 +206,7 @@ define([
 
       // create a query on the infoPoints layer to get all the buildings that will be displayed in the height graph
       var query = infoPoints.createQuery();
-      query.outFields = ["OBJECTID", "NAME", "HEIGHTROOF", "CNSTRCT_YR", "WIKI", "TOP20", "GEBAEUDETYP", "WOHNHOCHHAUS", "EGID"];
+      query.outFields = ["OBJECTID", "NAME", "HEIGHTROOF", "CNSTRCT_YR", "TOP20", "GEBAEUDETYP", "WOHNHOCHHAUS", "EGID"];
       query.returnGeometry = true;
       infoPoints.queryFeatures(query)
         .then(initGraphics)
@@ -242,11 +227,12 @@ define([
 
       state.watch("selectedPeriod", function(newPeriod) {
         // update building symbology
-        rendererGen.applyClassBreaksRenderer(newPeriod);
+          rendererGen.applyClassBreaksRenderer(newPeriod);
         // update height graph
         heightGraph.updatePeriod(newPeriod);
         // update timeline
-        timeline.update(newPeriod);
+          timeline.update(newPeriod);
+
       });
 
       view.whenLayerView(sceneLayer)
@@ -343,13 +329,9 @@ define([
       state.watch("selectedCategory", function(newCategory) {
         rendererGen.applyCategory(newCategory);
         heightGraph.applyCategory(newCategory);
-        // make info points visible when category "Only annotated buildings" is selected
-        /* if (newCategory === "info") {
-          infoPoints.visible = true;
-        }
-        else {
-          infoPoints.visible = false;
-        } */
+        //timeline.update(newPeriod);
+        //timeline.applyCategory(newCategory);
+
       });
 
       // when user clicks on a building, set it as the selected building in the state
@@ -417,14 +399,6 @@ define([
       on(domQuery(".esri-popup__main-container"), "mouseenter", function() {
         state.hoveredBuilding = null;
       });
-
-      // add events for disclaimer window
-      /*on(dom.byId("impressumLink"), "click", function() {
-        dom.byId("impressumContainer").style.display = "inline";
-      });
-      on(dom.byId("close"), "click", function() {
-        dom.byId("impressumContainer").style.display = "none";
-      });*/
 	  
 	  // add events for rechtliche Hinweise
       on(dom.byId("RechtLink"), "click", function() {
