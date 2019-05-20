@@ -227,11 +227,12 @@ define([
 
       state.watch("selectedPeriod", function(newPeriod) {
         // update building symbology
-        rendererGen.applyClassBreaksRenderer(newPeriod);
+          rendererGen.applyClassBreaksRenderer(newPeriod);
         // update height graph
         heightGraph.updatePeriod(newPeriod);
         // update timeline
-        timeline.update(newPeriod);
+          timeline.update(newPeriod);
+
       });
 
       view.whenLayerView(sceneLayer)
@@ -328,6 +329,8 @@ define([
       state.watch("selectedCategory", function(newCategory) {
         rendererGen.applyCategory(newCategory);
         heightGraph.applyCategory(newCategory);
+        //timeline.update(newPeriod);
+        //timeline.applyCategory(newCategory);
 
       });
 

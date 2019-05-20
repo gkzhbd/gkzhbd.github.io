@@ -47,7 +47,7 @@ define([
       this.state = state;
     },
 
-// Rendering für Häuser im HeightGraph
+    // Definiton für das Rendering der hervorgehobenen Häusern
     createClassBreakInfos: function(selectedPeriod) {
       return this.ageClasses.map(function(e, i) {
         var color = selectedPeriod[i] ? e.color : this.defaultColor;
@@ -59,38 +59,43 @@ define([
               material: {
                 color: color
               },
-			    edges: {
+			        edges: {
                 type: "solid",
                 size: 1,
                 color: [0, 0, 0, 0.5]
-			  }
+			        }
             })]
           })
         };
       }.bind(this));
     },
 
-// Rendering für nicht hervorgehobene Häuser
+    // Rendering
     applyClassBreaksRenderer: function(selectedPeriod) {
-
+      //Generelles Rendering
       var symbol = new MeshSymbol3D({
         symbolLayers: [ new FillSymbol3DLayer({
           material: { color: this.defaultColor},
-          /*edges: {
+          edges: {
             type: "solid",
             size: 1,
             color: [0, 0, 0, 0.5]
-          }*/
+          }
         })]
       });
+      
+      
+      
 
+      //Rendering für hervorgehobene Häuser, Definition von oben wird angewandt
       this.layer.renderer = new ClassBreaksRenderer({
         field: this.field,
         defaultSymbol: symbol,
         classBreakInfos: this.createClassBreakInfos(selectedPeriod)
       });
 
-      this.applyCategory(this.state.selectedCategory);
+
+      this.applyCategory(this.state.selectedCategory, this.state.selectedPeriod);
     },
 
     /*applyCategory: function(category) {
@@ -115,7 +120,7 @@ define([
       if (category === "all") {
         renderer.visualVariables = null;
       }
-      else if (category === "geplant") {
+      /*else if (category === "geplant") {
         renderer.visualVariables = [{
           type: "color",
           field: "CNSTRCT_YR",
@@ -133,7 +138,7 @@ define([
             color: [71, 181, 255]
           }]
         }];
-      }
+      }*/
       else {
         if (category === "info") {
           field = "wohnhochhaus";

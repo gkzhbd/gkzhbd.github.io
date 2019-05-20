@@ -117,7 +117,7 @@ body {
 }
 
 #timeDiv {
-  padding-left: 0px;
+  padding-left: 20px;
   transform-origin: left;
 }
 
@@ -156,24 +156,83 @@ button {
 }
 
 #timeDiv button {
-  width: 225px;
+  background-color: white;
+  width: 177px;
   margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 3px;
-  color: rgb(000, 112, 188);
+  color:  rgb(000, 112, 188);
 }
 
 #timeDiv button#period-0 {
-  width: 124px;
-  margin-bottom: 10px;
-  margin-left: 5px;
-  margin-right: 3px;
-  color: rgb(000, 112, 188);
+  width: 104px;
+  position: relative;
 }
+
+#timeDiv button#period-0:after  {
+  content: "";
+  position: absolute;
+  left: -20px;
+  bottom: -1px;
+  width: 0;
+  height: 0;
+  border-right: 20px solid ;
+  border-right-color: rgb(000, 112, 188);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+/*#timeDiv button#period-0:before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-right: 20px solid white;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+}*/
+
+/*#timeDiv button#Pfeil {
+  content: "";
+  position: absolute;
+  left: -5px;
+  bottom: 14px;
+  width: 0;
+  height: 20px;
+  border-right: 20px solid ;
+  border-right-color: rgb(000, 112, 188);
+  border-top: 15px solid white;
+  border-bottom: 15px solid white;
+}*/
+
+/*#timeDiv button#period-0:before  {
+  content: "";
+  position: absolute;
+  left: -19px;
+  bottom: -1px;
+  width: 0;
+  height: 0;
+  border-right: 20px solid  rgb(255, 255, 255);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}*/
+
+/*#timeDiv button#period-0:before  {
+  content: "";
+  position: absolute;
+  left: -20px;
+  bottom: -1px;
+  width: 0;
+  height: 0;
+  border-right: 20px solid  rgb(000, 112, 188);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}*/
 
 
 #timeDiv button:hover {
-  background-color: rgb(000, 067, 112);
   color: rgb(255, 255, 255);
   border: 1px solid rgb(000, 067, 112);
 }
@@ -200,7 +259,7 @@ button {
 
 #categoryDiv {
   position: absolute;
-  left: 1340px;
+  left: 1090px;
   top: 10px;
 }
 
@@ -209,7 +268,7 @@ button {
   display: block;
   margin-top: 10px;
   padding: 5px 12px;
-  width: 210px;
+  width: 200px;
 }
 
 

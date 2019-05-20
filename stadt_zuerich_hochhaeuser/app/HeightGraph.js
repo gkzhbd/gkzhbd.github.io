@@ -34,7 +34,7 @@ define([
     constructor: function(container, settings, features, state) {
 
       // general settings for the svg area
-      this.width = document.getElementById(container).clientWidth;
+      this.width = 1050;
       this.height = document.getElementById(container).clientHeight;
       this.paddingLeft = 130;
       this.paddingTop = 20;
@@ -52,7 +52,7 @@ define([
       // create scales
       var buildingOptions = settings.buildingOptions;
       var xScale = d3.scaleLinear()
-        .domain([/*buildingOptions.minCnstrctYear - 1*/ 1899, buildingOptions.maxCnstrctYear])
+        .domain([1899, buildingOptions.maxCnstrctYear])
         .range([this.paddingLeft, this.width]);
       var yScale = d3.scaleLinear()
         .domain([0, buildingOptions.maxHeight])
@@ -123,7 +123,29 @@ define([
           .attr("height", this.height - 43)
           .attr("width", 69); 
 
-
+     // handlers for filtering
+      /*var groupHandlers = svg.append("g");
+        groupHandlers.append("rect")
+        .classed("top", true)
+        .attr("x", xScale(2020))
+        .attr("y", yScale(buildingOptions.maxHeight) - 9)
+        .attr("width", 50)
+        .attr("height", 6)
+        .attr("rx", 5)
+        .attr("ry", 0)
+        .attr("cursor", "ns-resize")
+        .style("fill", "#bbb");
+      groupHandlers.append("rect")
+        .classed("bottom", true)
+        .attr("x", xScale(2020))
+        .attr("y", yScale(buildingOptions.minHeight) - 1)
+        .attr("width", 50)
+        .attr("height", 6)
+        .attr("rx", 5)
+        .attr("ry", 0)
+        .attr("cursor", "ns-resize")
+        .style("fill", "#bbb");*/
+        
       // define vertical axis and append it to the svg container
       var yAxisGroup = svg.append("g")
         .attr("transform", "translate(" + this.paddingLeft +", 0)")
@@ -145,7 +167,7 @@ define([
             return 1
           }
           else {
-            return 4
+            return 3.5
           };
         })
         .attr("opacity",  function(d) {
@@ -373,13 +395,12 @@ define([
     // change the points when a category is selected
     applyCategory: function(newCategory){
       if (newCategory === "all") {
-        this.circles.attr("fill", "rgba(000, 112, 188, 0.8)")
-          .attr("r",  function(d) {
+        this.circles.attr("r",  function(d) {
             if (d.attributes.cnstrct_yr < 1900) {
               return 1
             }
             else {
-              return 4
+              return 3.5
             };
           })
           .attr("opacity",  function(d) {
@@ -391,31 +412,30 @@ define([
             };
           });
       }
-      else if (newCategory === "geplant") {
-        var property = "cnstrct_yr";
+      /*else if (newCategory === "geplant") {
         this.circles.attr("fill", function(d) {
-          if (d.attributes[property] > 2019) {
+          if (d.attributes.cnstrct_yr > 2019) {
             return "rgba(71, 181, 255, 0.8)";
           }
           else {
             return "rgba(000, 112, 188, 0.8)";
           }
         })
-        .attr("r", 4);
-    }
+        .attr("r", 3.5);
+      }*/
       else {
         var property = (newCategory === "info") ? "wohnhochhaus" : "top20";
-        this.circles.attr("fill", function(d) {
+        this.circles.attr("opacity", function(d) {
           if (d.attributes[property] === 1) {
-            return "rgba(000, 112, 188, 0.8)";
+            return 1;
           }
           else {
-            return "rgba(255, 255, 255, 0)";
+            return 0;
           }
         })
         .attr("r", function(d) {
           if (d.attributes[property] === 1) {
-            return 4;
+            return 3.5;
           }
           else {
             return 0.1;
