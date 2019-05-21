@@ -98,22 +98,6 @@ define([
       this.applyCategory(this.state.selectedCategory, this.state.selectedPeriod);
     },
 
-    /*applyCategory: function(category) {
-      var field, renderer = this.layer.renderer.clone();
-        renderer.visualVariables = [{
-          type: "color",
-          field: "CNSTRCT_YR",
-          stops: [{
-            value: 2018,
-            color: this.defaultColor
-          }, {
-            value: 2019,
-            color: [255, 255, 000]
-          }]
-        }];
-      this.layer.renderer = renderer;
-    },*/
-
   //Spezialrenderer fuer Kategorieauswahl (rechter Rand). Falls Button gewählt wird, werden die oberen Renderer entsprechend den Einstellung des Spezialrenderers übersteuert.
     applyCategory: function(category) {
       var field, renderer = this.layer.renderer.clone();
