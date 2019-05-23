@@ -329,7 +329,8 @@ define([
 
       // categories help users visualize the most important buildings
       state.watch("selectedCategory", function(newCategory) {
-        rendererGen.applyCategory(newCategory);
+        var newPeriod = state.selectedPeriod;
+        rendererGen.applyCategory(newCategory, newPeriod);
         heightGraph.applyCategory(newCategory);
         //timeline.update(newPeriod);
         //timeline.applyCategory(newCategory);
