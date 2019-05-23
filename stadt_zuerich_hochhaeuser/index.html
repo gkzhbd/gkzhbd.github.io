@@ -27,7 +27,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <title>Hochhäuser in Zürich</title>
 
-  <link rel="stylesheet" href="https://jsdev.arcgis.com/4.7/esri/css/main.css">
+<link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Load AMD modules: the application itself and D3  -->
@@ -46,12 +46,12 @@
     };
   </script>
 
-  <!-- ArcGIS JavaScript API 4.7  -->
-  <script src="https://js.arcgis.com/4.7/"></script>
+  <!-- ArcGIS JavaScript API 4.11  -->
+  <script src="https://js.arcgis.com/4.11/"></script>
 
-  <!-- load Galleria and JQuery for the image gallery -->
-  <script src="./lib/jquery.js"></script>
-  <script src="./lib/galleria/galleria.js"></script>
+  <!-- load Galleria and JQuery for the image gallery. ---- Vorerst inaktiv, da keine Bilder gebraucht werden -->
+<!-- <script src="./lib/jquery.js"></script>
+  <script src="./lib/galleria/galleria.js"></script> -->
 
   <!-- Warnung beim Internet Explorer, basierend auf Code-Snippet von https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser/5916928 -->
 <script>
@@ -205,7 +205,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
 
             <div data-attach-point="headerLabel" class="header-label" >Hochhäuser</div>
 			<p id="Warnung"></p>
-        </div>
+        </div> 
   <!-- Einbindung der BZO-Layer-Checkbox und der dazugehörigen Legende. BZO-Layer wird in Application.js eingebunden-->
   <div id="layerToggle">
      <input type="checkbox" id="HHGebieteLayer">
@@ -233,7 +233,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
       Der Code dieser Anwendung ist Open Source und auf <a href="https://github.com/gkzhbd/gkzhbd.github.io/tree/master/stadt_zuerich_hochhaeuser" target="_blank">Github</a> verfügbar.
 	<br><br> Folgende Bibliotheken, APIs und Datensätze werden genutzt:
     <ul>
-      <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.7</a></li>
+      <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.11</a></li>
       <li>Diagramm: <a href="https://d3js.org/" target="_blank">D3Js</a> </li>
       <li>Daten: 
 	  <ul>

@@ -87,10 +87,11 @@ define([
       var buildings,
         heightGraph, timeline,
         selectHighlight, hoverHighlight;
+      
 
       // create map
       var map = new Map({
-        basemap: "topo",
+        basemap: 'topo',
         ground: "world-elevation"
       });
 
@@ -134,12 +135,13 @@ define([
         }
       });
     
-      watchUtils.whenFalse(view, "updating", function (evt) {
+      /*watchUtils.whenFalse(view, "updating", function (evt) {
         dom.byId("loading").style.display = "none";
-      });
-
+      });*/
+      
 	  // remove navigation widgets from upper left corner
-      view.ui.empty("top-left");
+    view.ui.move(["zoom", "compass"], "bottom-left");
+    view.ui.empty("top-left");
 
       // set view on the window for debugging
       window.view = view;

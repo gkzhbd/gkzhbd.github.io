@@ -37,10 +37,10 @@ define([
       this.settings = settings;
       for (var i = 0; i < settings.initPeriod.length; i++) {
         if (i===0) {
+          var Pfeil = domCtr.create("button", {id: "Pfeil"}, dom.byId(container));
+          on(Pfeil, "click", togglePeriod(i));
           var button = domCtr.create("button", {id: "period-" + i, innerHTML:  "vor 1900"}, dom.byId(container));
           on(button, "click", togglePeriod(i));
-          /*var Pfeil = domCtr.create("button", {id: "Pfeil"}, dom.byId(container));
-          on(Pfeil, "click", togglePeriod(i));*/
         } 
         else {
           button = domCtr.create("button", {id: "period-" + i, innerHTML: settings.ageClasses[i].minValue + " - " + settings.ageClasses[i].maxValue}, dom.byId(container));
@@ -61,9 +61,11 @@ define([
     },
 
     update: function(newPeriod) {
-      var buttonStyle;
+      var buttonStyle, PfeilStyle;
         for (var i = 0; i < newPeriod.length; i++) {
           if (i===0)  {
+            PfeilStyle = dom.byId("Pfeil").style;
+            PfeilStyle.borderRightColor = newPeriod[i] ? "rgb(000, 112, 188)" : "rgba(" + this.settings.defaultColor.join(",") + ")";
             buttonStyle = dom.byId("period-" + i).style;
             buttonStyle.backgroundColor = newPeriod[i] ? "rgb(" + this.settings.ageClasses[i].color.join(",") + ")" : "rgba(" + this.settings.defaultColor.join(",") + ")";
             buttonStyle.color = newPeriod[i] ? "#fff" : "#777";
