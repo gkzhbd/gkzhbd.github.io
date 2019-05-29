@@ -227,7 +227,7 @@ define([
 
       state.watch("selectedPeriod", function(newPeriod) {
         // update building symbology
-          rendererGen.applyClassBreaksRenderer(newPeriod);
+          rendererGen.applyClassBreaksRenderer();
         // update height graph
         heightGraph.updatePeriod(newPeriod);
         // update timeline
@@ -327,7 +327,7 @@ define([
 
       // categories help users visualize the most important buildings
       state.watch("selectedCategory", function(newCategory) {
-        rendererGen.applyCategory(newCategory);
+        rendererGen.applyClassBreaksRenderer();
         heightGraph.applyCategory(newCategory);
         //timeline.update(newPeriod);
         //timeline.applyCategory(newCategory);

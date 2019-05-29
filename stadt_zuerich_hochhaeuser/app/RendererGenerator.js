@@ -71,7 +71,7 @@ define([
     },
 
     // Rendering
-    applyClassBreaksRenderer: function(selectedPeriod) {
+    applyClassBreaksRenderer: function() {
       //Generelles Rendering
       var symbol = new MeshSymbol3D({
         symbolLayers: [ new FillSymbol3DLayer({
@@ -83,21 +83,33 @@ define([
           }
         })]
       });
-      
-      
+
+      var state = this.state;
+      var valueExpression = null;
+      if (state.selectedCategory === "all") {
+        valueExpression = "$feature.CNSTRCT_YR";
+      }
+      if (state.selectedCategory === "info") {
+        valueExpression = "Iif(Boolean($feature.wohnhochhaus), $feature.CNSTRCT_YR, 0)";
+      }
+      if (state.selectedCategory === "top") {
+        valueExpression = "Iif(Boolean($feature.top20), $feature.CNSTRCT_YR, 0 )";
+      }
       
 
       //Rendering für hervorgehobene Häuser, Definition von oben wird angewandt
       this.layer.renderer = new ClassBreaksRenderer({
-        field: this.field,
+        //field: this.field,
+        valueExpression: valueExpression,
         defaultSymbol: symbol,
-        classBreakInfos: this.createClassBreakInfos(selectedPeriod)
+        classBreakInfos: this.createClassBreakInfos(state.selectedPeriod)
       });
 
 
-      this.applyCategory(this.state.selectedCategory, this.state.selectedPeriod);
+      //this.applyCategory(this.state.selectedCategory, this.state.selectedPeriod);
     },
 
+    // you can delete applyCategory, it's not needed anymore
   //Spezialrenderer fuer Kategorieauswahl (rechter Rand). Falls Button gewählt wird, werden die oberen Renderer entsprechend den Einstellung des Spezialrenderers übersteuert.
     applyCategory: function(category) {
       var field, renderer = this.layer.renderer.clone();
