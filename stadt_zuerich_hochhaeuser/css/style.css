@@ -117,7 +117,7 @@ body {
 }
 
 #timeDiv {
-  padding-left: 20px;
+  left: -30px;
   transform-origin: left;
 }
 
@@ -155,6 +155,18 @@ button {
   color: rgb(000, 112, 188);
 }
 
+#timeDiv button#Pfeil {
+  z-index: 100;
+  left: 8px;
+  bottom: 5px;
+  width: 0px;
+  border-right: 20px solid ;
+  border-right-color:rgb(000, 112, 188);
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 20px solid transparent
+}
+
 #timeDiv button {
   background-color: white;
   width: 177px;
@@ -165,11 +177,12 @@ button {
 }
 
 #timeDiv button#period-0 {
-  width: 104px;
+  width: 90px;
   position: relative;
 }
 
-#timeDiv button#period-0:after  {
+/*#timeDiv button#period-0:before  {
+  z-index: 99;
   content: "";
   position: absolute;
   left: -20px;
@@ -180,7 +193,7 @@ button {
   border-right-color: rgb(000, 112, 188);
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-}
+}/*
 
 /*#timeDiv button#period-0:before {
   content: "";
@@ -192,19 +205,6 @@ button {
   border-right: 20px solid white;
   border-top: 14px solid transparent;
   border-bottom: 14px solid transparent;
-}*/
-
-/*#timeDiv button#Pfeil {
-  content: "";
-  position: absolute;
-  left: -5px;
-  bottom: 14px;
-  width: 0;
-  height: 20px;
-  border-right: 20px solid ;
-  border-right-color: rgb(000, 112, 188);
-  border-top: 15px solid white;
-  border-bottom: 15px solid white;
 }*/
 
 /*#timeDiv button#period-0:before  {
@@ -232,10 +232,10 @@ button {
 }*/
 
 
-#timeDiv button:hover {
-  color: rgb(255, 255, 255);
+/*#timeDiv button:hover {
+  background-color: rgb(255, 255, 255);
   border: 1px solid rgb(000, 067, 112);
-}
+}*/
 
 
 #logo {
@@ -323,13 +323,13 @@ rect.handle--n, rect.handle--s {
 }
 
 .esri-popup__main-container h3 {
-  margin-top: -5px;
+  margin-top: 0px;
   font-weight: normal;
   font-size: 1.6rem;
 }
 
 .esri-popup__main-container p {
-  margin-top: 2px;
+  margin-top: 5px;
 }
 
 .esri-popup__content {

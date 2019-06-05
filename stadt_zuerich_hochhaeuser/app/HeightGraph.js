@@ -34,9 +34,9 @@ define([
     constructor: function(container, settings, features, state) {
 
       // general settings for the svg area
-      this.width = 1050;
+      this.width = 1070;
       this.height = document.getElementById(container).clientHeight;
-      this.paddingLeft = 130;
+      this.paddingLeft = 160;
       this.paddingTop = 20;
       this.paddingBottom = 15;
       this.ageClasses = settings.ageClasses;
@@ -236,6 +236,7 @@ define([
           svg.select("#lower-indicator")
             .attr("y", d3.event.selection[1] + 15)
             .text(Math.round(yScale.invert(d3.event.selection[1])));
+          state.filteredBuildings = [yScale.invert(d3.event.selection[1]), yScale.invert(d3.event.selection[0])];
       });
       brush.on("end", function() {
         svg.select("#upper-indicator")
@@ -246,7 +247,7 @@ define([
           yAxisGroup.call(brush).call(brush.move, [yScale(1500), yScale(0)]);
         }
 	
-      delayFilter (true, state, yScale, d3.event);
+      //delayFilter (true, state, yScale, d3.event);
 
       });
 
@@ -288,7 +289,8 @@ define([
         .text(function() {
           var a = d.attributes;
           var name = a.name === "baulicher Akzent"  || a.name === null || a.name === "St.-Jakobs-Kirche (Zürich)" || (a.name === "Kirche" && a.cnstrct_yr === 1900) ? " " : a.name; //Gebäude mit Nullwert, "baulicher Akzent" oder "St.-Jakobs-Kirche (Zürich)" im Namensfeld werden ignoriert bei der Beschriftung der tooltips im Diagramm
-          return name + " gebaut " + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + " m";
+          var status = a.cnstrct_yr > 2019  ? " geplant " : " gebaut ";
+          return name + status + a.cnstrct_yr + "; Höhe " + Math.round(parseFloat(a.heightroof)) + " m";
         });
       var bbox = text.node().getBBox();
 

@@ -87,10 +87,11 @@ define([
       var buildings,
         heightGraph, timeline,
         selectHighlight, hoverHighlight;
+      
 
       // create map
       var map = new Map({
-        basemap: "topo",
+        basemap: 'topo',
         ground: "world-elevation"
       });
 
@@ -134,12 +135,13 @@ define([
         }
       });
     
-      watchUtils.whenFalse(view, "updating", function (evt) {
+      /*watchUtils.whenFalse(view, "updating", function (evt) {
         dom.byId("loading").style.display = "none";
-      });
-
+      });*/
+      
 	  // remove navigation widgets from upper left corner
-      view.ui.empty("top-left");
+    view.ui.move(["zoom", "compass"], "bottom-left");
+    view.ui.empty("top-left");
 
       // set view on the window for debugging
       window.view = view;
@@ -327,7 +329,8 @@ define([
 
       // categories help users visualize the most important buildings
       state.watch("selectedCategory", function(newCategory) {
-        rendererGen.applyCategory(newCategory);
+        var newPeriod = state.selectedPeriod;
+        rendererGen.applyCategory(newCategory, newPeriod);
         heightGraph.applyCategory(newCategory);
         //timeline.update(newPeriod);
         //timeline.applyCategory(newCategory);

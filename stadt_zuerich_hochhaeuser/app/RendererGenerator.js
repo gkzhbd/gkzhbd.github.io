@@ -99,8 +99,13 @@ define([
     },
 
   //Spezialrenderer fuer Kategorieauswahl (rechter Rand). Falls Button gewählt wird, werden die oberen Renderer entsprechend den Einstellung des Spezialrenderers übersteuert.
-    applyCategory: function(category) {
-      var field, renderer = this.layer.renderer.clone();
+    applyCategory: function(category, newPeriod) {
+      var field, renderer = this.layer.renderer.clone(), Period = new Array(6), filter_yr = new Array(6), expression;
+      for (var i = 0; i < newPeriod.length; i++) {
+            Period[i] = newPeriod[i] ? 1 : 0;
+            filter_yr[i] = "(($feature.cnstrct_yr >" + (this.ageClasses[i].minValue - 1) + ") && ($feature.cnstrct_yr < " + (this.ageClasses[i].maxValue + 1) + ")) {" + Period[i] + " * $feature."
+      };
+      //alert(filter_yr);
       if (category === "all") {
         renderer.visualVariables = null;
       }
@@ -123,16 +128,19 @@ define([
           }]
         }];
       }*/
+
       else {
         if (category === "info") {
           field = "wohnhochhaus";
+          expression = "if " + filter_yr[0] + field + "} else if "+ filter_yr[1] + field + "} else if "+ filter_yr[2] + field + "} else if " + filter_yr[3] + field + "} else if "+ filter_yr[4] + field + "} else if "+ filter_yr[5] + field + "}";
         }
         else {
           field = "top20";
+          expression = "if " + filter_yr[0] + field + "} else if "+ filter_yr[1] + field + "} else if "+ filter_yr[2] + field + "} else if " + filter_yr[3] + field + "} else if "+ filter_yr[4] + field + "} else if "+ filter_yr[5] + field + "}";
         }
         renderer.visualVariables = [{
           type: "color",
-          field: field,
+          valueExpression: expression,
           stops: [{
             value: 0,
             color: this.defaultColor
