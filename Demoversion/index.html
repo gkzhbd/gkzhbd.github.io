@@ -154,10 +154,10 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
         }, {
           value: "top",
           text: "Höchste 20 Gebäude"
-        }/*,{
+        },{
           value: "geplant",
           text: "Geplante Hochhäuser"
-        }*/],
+        }],
 		infoPointsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_InfoPunkte_20190509/FeatureServer",
         initCategory: "all",
         buildingsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_ZuSE_20190509/SceneServer"
@@ -178,7 +178,7 @@ document.getElementById("Warnung").innerHTML = MobileFunction()
       alert("Diese Applikation ist auf eine Fensterbreite von mindestens 1534 Pixel optimiert. Verwenden Sie nach Möglichkeit einen breiteren Bildschirm oder erhöhen Sie die Bildschirmauflösung.")
     }  
     if (document.body.offsetWidth < 1534 && isMobile.nothing()) {
-       document.getElementById("Warnung").innerHTML = Fenster()
+       Fenster()
     }
   </script>
   <div id="viewDiv"></div>
