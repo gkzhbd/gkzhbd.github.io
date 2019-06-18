@@ -183,7 +183,7 @@ define([
 	  
 	  // BZO Hochhausgebiete
 	  var HHGebiete = new FeatureLayer({
-		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/BZO_Hochhausgebiet_neu/FeatureServer",
+		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/AFS_SDE_BZO_HOCHHAUSGEBIET_V/FeatureServer",
 		 opacity: 0.85,
 		 visible: false
 	  });
