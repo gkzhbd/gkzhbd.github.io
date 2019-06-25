@@ -523,3 +523,9 @@ margin-bottom: 3px;
 margin-left: 26px;
 }
 
+.action {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
