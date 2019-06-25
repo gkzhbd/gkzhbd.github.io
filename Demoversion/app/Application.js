@@ -27,10 +27,13 @@
 
 define([
   "dojo/_base/declare",
-
   "esri/core/Accessor",
-
+  
+  "esri/portal/Portal",
+  "esri/identity/OAuthInfo",
+  "esri/identity/IdentityManager",
   "esri/Map",
+  "esri/Basemap",
   "esri/views/SceneView",
   "esri/layers/ElevationLayer",
   "esri/layers/SceneLayer",
@@ -38,6 +41,7 @@ define([
   "esri/tasks/support/Query",
   "esri/renderers/SimpleRenderer",
   "esri/core/watchUtils",
+  "esri/Ground",
 
   "app/RendererGenerator",
   "app/HeightGraph",
@@ -51,7 +55,7 @@ define([
   "dojo/on",
   "dojo/query"
 ], function(declare, Accessor,
-  Map, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils,
+  Portal, OAuthInfo, identityManager, Map, Basemap, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils, Ground,
   RendererGenerator, HeightGraph, Timeline, InfoWidget, labels, searchWidget, categorySelection,
   dom, on, domQuery
 ) {
@@ -88,11 +92,66 @@ define([
         heightGraph, timeline,
         selectHighlight, hoverHighlight;
       
+      //*** START SECURITY ***
+      // ArcGIS Enterprise Portals are also supported
+      var portalUrl = "https://stzh.maps.arcgis.com/sharing";
+
+      var info = new OAuthInfo({
+        appId: "qId0bkDT56ClVrLR",
+        popup: false // inline redirects don't require any additional app configuration
+      });
+      identityManager.registerOAuthInfos([info])
+
+      // send users to arcgis.com to login
+       on(dom.byId("sign-in"), "click", function() {
+       identityManager.getCredential(portalUrl);
+      });
+
+      // log out and reload
+      on(dom.byId("sign-out"), "click", function() {
+      identityManager.destroyCredentials();
+      window.location.reload();
+      });
+
+      // persist logins when the page is refreshed
+      identityManager.checkSignInStatus(portalUrl).then(
+      function() {
+        dom.byId('anonymousPanel').style.display = 'none';
+          dom.byId('personalizedPanel').style.display = 'block'
+
+          // display the map once the user is logged in
+          displayMap();
+        });
+      
+      //*** ENDE SECURITY ***
 
       // create map
+      function displayMap() {
+        var portal = new Portal();
+
+          // Once the portal has loaded, the user is signed in
+          portal.load().then(function() {
+            dom.byId('viewDiv').style.display = 'flex';
+      var basemap = new Basemap({
+        portalItem: {
+          id: "eb443aa9a2384c8ea53c8dbaf8beb8d0"
+        }
+      });
+
+      var worldElevation = ElevationLayer({
+        url: "//elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
+      });
+      var customElevation = ElevationLayer({
+        url: "https://tiles.arcgis.com/tiles/ivZnKqrRPYFS9V9R/arcgis/rest/services/dtm_av_stzh_floating_res_filtfilt_tif/ImageServer"
+      });
+      
+      var ground = new Ground({
+        layers: [worldElevation]
+      });
+
       var map = new Map({
-        basemap: 'topo',
-        ground: "world-elevation"
+        basemap: "topo",
+        ground: ground
       });
 
       // create view
@@ -134,6 +193,7 @@ define([
           }
         }
       });
+    
     
       /*watchUtils.whenFalse(view, "updating", function (evt) {
         dom.byId("loading").style.display = "none";
@@ -183,7 +243,7 @@ define([
 	  
 	  // BZO Hochhausgebiete
 	  var HHGebiete = new FeatureLayer({
-		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/AFS_SDE_BZO_HOCHHAUSGEBIET_V/FeatureServer/7?token=0Q6lm7Ky5El8uVVL4wpcJHOlKy-lCWXdUiNFIg2MTDJqPsQaKFTI-6ulCo9SUbieZP-PYh-w2zgil48mYMJFNwzxYsL9JzN9e-YKxqvCOqfTMJMWgbMxi54RxqFHgtN8MrrPeoDmIyKVktMRhSGpbJGvckb2szTfEXY8vqHxXxe7yfnBOXox8UxKQkiph_A6piU0U-9moN9lWft1q5TaG9JBCRAej_qyOluyK2W_VtwTPwFGNoVT1PnmNP3ugzj8",
+		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/BZO_Hochhausgebiet_neu/FeatureServer",
 		 opacity: 0.85,
 		 visible: false
 	  });
@@ -198,7 +258,7 @@ define([
 		HHGebiete.visible = HHGebieteToggle.checked;
 	  });
 	  
-
+    
 
       // initialize info widget
       var infoWidget = new InfoWidget(view, state);
@@ -391,7 +451,8 @@ define([
         })[0];
         return feature;
       }
-
+    });
+    }
       // remove hovered building when mouse is outside of map
       on(dom.byId("menuDiv"), "mouseenter", function() {
         state.hoveredBuilding = null;
