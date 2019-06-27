@@ -16,306 +16,374 @@
 
    See the License for the specific language governing permissions and
 
-   limitations under the License.​-->
+   limitations under the License.-->
 
-<!DOCTYPE html>
-<html>
+   <!DOCTYPE html>
+   <html>
+   
+   <head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+     <title>Hochhäuser in Zürich</title>
+   
+   <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
+     <link rel="stylesheet" href="css/style.css">
+   
+     <!-- Load AMD modules: the application itself and D3  -->
+     <script>
+       var locationPath = location.pathname.replace(/\/[^\/]+$/, "").replace("/", "").replace("index.html","");
+       var dojoConfig = {
+         packages: [{
+           name: "d3",
+           location: locationPath + "/lib",
+           main: "d3"
+         }, {
+           name: "app",
+           location: locationPath + "/app"
+         }],
+         async: true
+       };
+     </script>
+   
+     <!-- ArcGIS JavaScript API 4.11  -->
+     <script src="https://js.arcgis.com/4.11/"></script>
+   
+     <!-- load Galleria and JQuery for the image gallery. ---- Vorerst inaktiv, da keine Bilder gebraucht werden -->
+   <!-- <script src="./lib/jquery.js"></script>
+     <script src="./lib/galleria/galleria.js"></script> -->
+   
+     <!-- Warnung beim Internet Explorer, basierend auf Code-Snippet von https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser/5916928 -->
+   <script>
+   function myFunction() {
+     alert("Bitte benutzen Sie einen aktuellen Browser, um eine optimale Performance der Anwendung zu erreichen.");
+   }
+   navigator.browserSpecs = (function(){
+       var ua = navigator.userAgent, tem, 
+           M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+       if(/trident/i.test(M[1])){
+           tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+           return {name:'IE',version:(tem[1] || '')};
+       }
+       if(M[1]=== 'Chrome'){
+           tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+           if(tem != null) return {name:tem[1].replace('OPR', 'Opera'),version:tem[2]};
+       }
+       M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+       if((tem = ua.match(/version\/(\d+)/i))!= null)
+           M.splice(1, 1, tem[1]);
+       return {name:M[0], version:M[1]};
+   })();
+   
+   if (navigator.browserSpecs.name == 'IE') {
+   document.getElementById("Warnung").innerHTML = myFunction()
+   }
+   </script>
+   
+   <!--Warnmeldung bei mobilem Endgerät, basierend auf Code-Snippet von https://blog.julitec.com/dev/mit-javascript-mobile-ger%C3%A4te-erkennen-->
+   <script>
+   function MobileFunction() {
+     alert("Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer.");
+     }
+   var isMobile = {
+       Android: function () {
+           return navigator.userAgent.match(/Android/i);
+       },
+       BlackBerry: function () {
+           return navigator.userAgent.match(/BlackBerry/i);
+       },
+       iOS: function () {
+           return navigator.userAgent.match(/iPhone|iPod|iPad/i);
+       },
+       Opera: function () {
+           return navigator.userAgent.match(/Opera Mini/i);
+      },
+       Windows: function () {
+           return navigator.userAgent.match(/IEMobile/i);
+       },
+       any: function () {
+           return ((isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()));
+       },
+       nothing: function () {
+           return (!(isMobile.any()));
+     }
+   };
+   
+   if (isMobile.any()) {
+   document.getElementById("Warnung").innerHTML = MobileFunction()
+   }
+   </script>
+   
+   <!-- Einbindung der Applikation in HTML -->
+     <script>
+       require([
+         "app/Application",
+         "dojo/domReady!"
+       ], function (Application) {
+   
+         // general application settings like colors and initial settings
+         var settings = {
+            ageClasses: [
+             { minValue: 1000, maxValue: 1899, color: [000, 112, 188] },
+             { minValue: 1900, maxValue: 1924, color: [000, 112, 188] },
+             { minValue: 1925, maxValue: 1949, color: [000, 112, 188] },
+             { minValue: 1950, maxValue: 1974, color: [000, 112, 188] },
+             { minValue: 1975, maxValue: 1999, color: [000, 112, 188] },
+             { minValue: 2000, maxValue: 2024, color: [000, 112, 188] }
+           ],
+           defaultColor: [255, 255, 255, 1],
+           highlightOptions: {
+             color: [255, 255, 0, 1],
+             fillOpacity: 0.4
+           },
+           buildingOptions: {
+             minHeight: 0,
+             maxHeight: 150,
+             minCnstrctYear: 1000,
+             maxCnstrctYear: 2024
+           },
+           initPeriod: [true, true, true, true, true, true],
+           //Kategorien für Selektier-Buttons am linken Rand.
+           categories: [{ 
+             value: "all",
+             text: "Alle Hochhäuser"
+           }, {
+             value: "info",
+             text: "Wohnhochhäuser"
+           }, {
+             value: "top",
+             text: "Höchste 20 Gebäude"
+           },{
+             value: "geplant",
+             text: "Geplante Hochhäuser"
+           }],
+       infoPointsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_InfoPunkte_20190509/FeatureServer",
+           initCategory: "all",
+           buildingsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_ZuSE_20190509/SceneServer"
+         };
+   
+         // initialize application
+         var app = new Application(settings);
+         app.init({ view: "viewDiv", timeline: "timeDiv", heightGraph: "heightDiv", categories: "categoryDiv" });
+     });
+   </script>
+   </head>
+   
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-  <title>Hochhäuser in Zürich</title>
-
-<link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Load AMD modules: the application itself and D3  -->
-  <script>
-    var locationPath = location.pathname.replace(/\/[^\/]+$/, "").replace("/", "").replace("index.html","");
-    var dojoConfig = {
-      packages: [{
-        name: "d3",
-        location: locationPath + "/lib",
-        main: "d3"
-      }, {
-        name: "app",
-        location: locationPath + "/app"
-      }],
-      async: true
-    };
-  </script>
-
-  <!-- ArcGIS JavaScript API 4.11  -->
-  <script src="https://js.arcgis.com/4.11/"></script>
-
-  <!-- load Galleria and JQuery for the image gallery. ---- Vorerst inaktiv, da keine Bilder gebraucht werden -->
-<!-- <script src="./lib/jquery.js"></script>
-  <script src="./lib/galleria/galleria.js"></script> -->
-
-  <!-- Warnung beim Internet Explorer, basierend auf Code-Snippet von https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser/5916928 -->
-<script>
-function myFunction() {
-  alert("Bitte benutzen Sie einen aktuellen Browser, um eine optimale Performance der Anwendung zu erreichen.");
-}
-navigator.browserSpecs = (function(){
-    var ua = navigator.userAgent, tem, 
-        M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if(/trident/i.test(M[1])){
-        tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-        return {name:'IE',version:(tem[1] || '')};
-    }
-    if(M[1]=== 'Chrome'){
-        tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-        if(tem != null) return {name:tem[1].replace('OPR', 'Opera'),version:tem[2]};
-    }
-    M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-    if((tem = ua.match(/version\/(\d+)/i))!= null)
-        M.splice(1, 1, tem[1]);
-    return {name:M[0], version:M[1]};
-})();
 
 
-if (navigator.browserSpecs.name == 'IE') {
-document.getElementById("Warnung").innerHTML = myFunction()
-}
-</script>
-
-<!--Warnmeldung bei mobilem Endgerät, basierend auf Code-Snippet von https://blog.julitec.com/dev/mit-javascript-mobile-ger%C3%A4te-erkennen-->
-<script>
-function MobileFunction() {
-  alert("Diese Applikation ist nicht auf mobile Geräte optimiert. Für eine optimale Performance benutzen Sie bitte einen Laptop oder stationären Computer.");
-  }
-var isMobile = {
-    Android: function () {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function () {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function () {
-        return navigator.userAgent.match(/iPhone|iPod|iPad/i);
-    },
-    Opera: function () {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function () {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function () {
-        return ((isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()));
-    },
-	  nothing: function () {
-	      return (!(isMobile.any()));
-	}
-};
-
-if (isMobile.any()) {
-document.getElementById("Warnung").innerHTML = MobileFunction()
-}
-</script>
-
-<!-- Einbindung der Applikation in HTML -->
-  <script>
-    require([
-      "app/Application",
-      "dojo/domReady!"
-    ], function (Application) {
-
-      // general application settings like colors and initial settings
-      var settings = {
-         ageClasses: [
-          { minValue: 1000, maxValue: 1899, color: [000, 112, 188] },
-          { minValue: 1900, maxValue: 1924, color: [000, 112, 188] },
-          { minValue: 1925, maxValue: 1949, color: [000, 112, 188] },
-          { minValue: 1950, maxValue: 1974, color: [000, 112, 188] },
-          { minValue: 1975, maxValue: 1999, color: [000, 112, 188] },
-          { minValue: 2000, maxValue: 2024, color: [000, 112, 188] }
-        ],
-        defaultColor: [255, 255, 255, 1],
-        highlightOptions: {
-          color: [255, 255, 0, 1],
-          fillOpacity: 0.4
-        },
-        buildingOptions: {
-          minHeight: 0,
-          maxHeight: 150,
-          minCnstrctYear: 1000,
-          maxCnstrctYear: 2024
-        },
-        initPeriod: [true, true, true, true, true, true],
-        //Kategorien für Selektier-Buttons am linken Rand.
-        categories: [{ 
-          value: "all",
-          text: "Alle Hochhäuser"
-        }, {
-          value: "info",
-          text: "Wohnhochhäuser"
-        }, {
-          value: "top",
-          text: "Höchste 20 Gebäude"
-        },{
-          value: "geplant",
-          text: "Geplante Hochhäuser"
-        }],
-		infoPointsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_InfoPunkte_20190509/FeatureServer",
-        initCategory: "all",
-        buildingsUrl: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/HHUebersicht_3D_Gebaeude_ZuSE_20190509/SceneServer"
-      };
-
-      // initialize application
-      var app = new Application(settings);
-      app.init({ view: "viewDiv", timeline: "timeDiv", heightGraph: "heightDiv", categories: "categoryDiv" });
-  });
-</script>
-</head>
-
-<body>
-
-<!--Warnmeldung bei zu kleinem Fenster-->
-<script>
-    function Fenster() {
-      alert("Diese Applikation ist auf eine Fensterbreite von mindestens 1534 Pixel optimiert. Verwenden Sie nach Möglichkeit einen breiteren Bildschirm oder erhöhen Sie die Bildschirmauflösung.")
-    }  
-    if (document.body.offsetWidth < 1534 && isMobile.nothing()) {
-       Fenster()
-    }
-  </script>
-  <div id="anonymousPanel" style="display: block; padding: 5px; text-align: center;">
-    <span id="sign-in" class="action">Sign In</span> to see live traffic.
-  </div>
-
-  <div id="personalizedPanel" style="display: none; padding: 5px; text-align: center;">
-    Welcome <span id="userId" style="font-weight: bold;"></span> &nbsp;-&nbsp;
-    <span id="sign-out" class="action">Sign Out</span>
-  </div>
+   <body>
+   
+   <!--Warnmeldung bei zu kleinem Fenster-->
+   <script>
+       function Fenster() {
+         alert("Diese Applikation ist auf eine Fensterbreite von mindestens 1534 Pixel optimiert. Verwenden Sie nach Möglichkeit einen breiteren Bildschirm oder erhöhen Sie die Bildschirmauflösung.")
+       }  
+       if (document.body.offsetWidth < 1534 && isMobile.nothing()) {
+          Fenster()
+       }
+     </script>
+   
+     
+     <div id="viewDiv"></div>
+     <div id="loading">
+       <p id="loadingInfo">
+         <p>Loading...</p>
+         <img id="loadingImage" src="./img/loading.gif" alt="Loading..." />
+       </p>
+     </div>
+     <div id="menuDiv">
+       <div id="timeWrap">
+         <div id="heightDiv"></div>
+         <div id="timeDiv"></div>
+         <div id="categoryDiv"></div>
+       </div>
+     </div>
+   <div class="header-logo-container bg-blue text-white typo-header" data-attach-point="logoContainer">
+               <a href="http://www.stadt-zuerich.ch" target="_blank">
+   
+                   <div class="header-image">
+   
+                   </div>
+               </a>
+   
+               <div data-attach-point="headerLabel" class="header-label" >Hochhäuser</div>
+         <p id="Warnung"></p>
+           </div> 
+     <!-- Einbindung der BZO-Layer-Checkbox und der dazugehörigen Legende. BZO-Layer wird in Application.js eingebunden-->
+     <div id="layerToggle">
+        <input type="checkbox" id="HHGebieteLayer">
+      <span>Hochhausgebiete gemäss Bau-</span><div style="margin-left:25px">und Zonenordnung (BZO)<image id="info1" src="./img/Info_Simple_bw.svg"></image></div>
+      <!--<div>
+        <image id="BZO" src="./img/BZO1.PNG">
+        <span id="Legende">Hochhausgebiet I</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO2.PNG">
+        <span id="Legende">Hochhausgebiet II</span>
+      </div>
+      <div>
+         <image id="BZO" src="./img/BZO3.PNG">
+        <span id="Legende">Hochhausgebiet III</span>
+      </div>-->
+      <br>
+      <input type="checkbox" id="BZO_ZonenLayer">
+      <span>Zonenplan gemäss Bau-</span><div style="margin-left:25px">und Zonenordnung (BZO)<image id="info2" src="./img/Info_Simple_bw.svg"></image></div>
+     </div>
+     
     
-  <div id="viewDiv"></div>
-  <div id="loading">
-    <p id="loadingInfo">
-      <p>Loading...</p>
-      <img id="loadingImage" src="./img/loading.gif" alt="Loading..." />
-    </p>
-  </div>
-  <div id="menuDiv">
-    <div id="timeWrap">
-      <div id="heightDiv"></div>
-      <div id="timeDiv"></div>
-      <div id="categoryDiv"></div>
-    </div>
-  </div>
-<div class="header-logo-container bg-blue text-white typo-header" data-attach-point="logoContainer">
-            <a href="http://www.stadt-zuerich.ch" target="_blank">
+     <div id="info_container">
+      <span class="esri-icon-close" id="close4"></span>
+      <h2>Legende</h2>
+      <h3>Hochhauszonen nach BZO</h3>
+      <div>
+        <image id="BZO" src="./img/BZO1.PNG">
+        <span id="Legende">Hochhausgebiet I</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO2.PNG">
+        <span id="Legende">Hochhausgebiet II</span>
+      </div>
+      <div>
+         <image id="BZO" src="./img/BZO3.PNG">
+        <span id="Legende">Hochhausgebiet III</span>
+      </div>
+      <h3>Nutzungsplan nach BZO</h3>
+      <div>
+        <image id="BZO" src="./img/BZO1.PNG">
+        <span id="Legende">Hochhausgebiet I</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO2.PNG">
+        <span id="Legende">Hochhausgebiet II</span>
+      </div>
+      <div>
+         <image id="BZO" src="./img/BZO3.PNG">
+        <span id="Legende">Hochhausgebiet III</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO1.PNG">
+        <span id="Legende">Hochhausgebiet I</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO2.PNG">
+        <span id="Legende">Hochhausgebiet II</span>
+      </div>
+      <div>
+         <image id="BZO" src="./img/BZO3.PNG">
+        <span id="Legende">Hochhausgebiet III</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO1.PNG">
+        <span id="Legende">Hochhausgebiet I</span>
+      </div>
+      <div>
+        <image id="BZO" src="./img/BZO2.PNG">
+        <span id="Legende">Hochhausgebiet II</span>
+      </div>
+      <div>
+         <image id="BZO" src="./img/BZO3.PNG">
+        <span id="Legende">Hochhausgebiet III</span>
+      </div>
+     </div>
 
-                <div class="header-image">
+   <div id="RechtContainer">
+       <span class="esri-icon-close" id="close1"></span>
+       <h2>Rechtliche Hinweise</h2>
+       <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung 
+         <a href="https://github.com/Esri/Manhattan-skyscraper-explorer" target="_blank">"Manhattan Skyscraper Explorer"</a> von Raluca Nicola erstellt.
+         Der Code dieser Anwendung ist Open Source und auf <a href="https://github.com/gkzhbd/gkzhbd.github.io/tree/master/stadt_zuerich_hochhaeuser" target="_blank">Github</a> verfügbar.
+     <br><br> Folgende Bibliotheken, APIs und Datensätze werden genutzt:
+       <ul>
+         <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.11</a></li>
+         <li>Diagramm: <a href="https://d3js.org/" target="_blank">D3Js</a> </li>
+         <li>Daten: 
+       <ul>
+       <li>3D-Gebäude: <a href="https://data.stadt-zuerich.ch/dataset?tags=3d-stadtmodell" target="_blank">3D-Stadtmodell</a> der Stadt Zürich</li>
+       <li>Baujahre: Gebäude- und Wohnungsregister der Stadt Zürich (GWZ)</li>
+       <li>Hintergrundkarte und Gelände: siehe Kartenfenster unten</li>
+       </ul>
+     </ul>
+     Die Stadt Zürich kann nicht dafür einstehen, dass dieses elektronisches Informationsangebot sowie die angebotenen Funktionalitäten 
+     jederzeit störungsfrei benutzt und die abgefragten Informationen reibungslos und fehlerfrei übertragen werden können.
+     <br><br>
+     Die Stadt Zürich kann nicht gewährleisten, dass die von ihr auf dem Internet zur Verfügung gestellten Informationen 
+     jederzeit aktuell, detailgenau und vollständig sind und alle erdenklichen Sachverhalte berücksichtigen.
+     </p>
+     </div>
+     
+      <div id="ImprContainer">
+       <span class="esri-icon-close" id="close2"></span>
+       <h2>Impressum</h2>
+     <h3>Kontakt</h3>
+     <p><b>Amt für Städtebau</b><br>
+     Lindenhofstrasse 19<br>
+     Amtshaus IV<br>
+     8001 Zürich<br>
+     Telefon +41 44 412 11 11<br>
+     <a href="https://www.stadt-zuerich.ch/afs" target="_blank">https://www.stadt-zuerich.ch/afs</a>
+     </div>
+     
+     <div id="NutzungContainer">
+       <span class="esri-icon-close" id="close3"></span>
+       <h2>Nutzungshinweise</h2>
+       <h3> Was ist das für eine Anwendung?</h3>
+       <p>Die Anwendung zeigt eine gesamtstädtische Übersicht aller bestehenden und einige der geplanten Hochhäuser. 
+         Sie wurde als Grundlage für die Überprüfung und Aktualisierung der Hochhausrichtlinien und -gebiete erstellt.
+         Die Anwendung umfasst ein interaktives 3D-Kartentool, welches mit einem Diagramm zu Höhe und Baujahr der Gebäude verknüpft ist.</p>
+     <h3>Was sind Hochhäuser?</h3>
+     <p>Gemäss kantonalem Planungs- und Baugesetz (§282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
+     <h3>Welche Hochhäuser sind dargestellt?</h3>
+     Datengrundlage bilden die Gebäude aus dem 
+     <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html" target="_blank">3D-Stadtmodell</a>
+      der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich. 
+      Farblich hervorgehoben und im Diagramm dargestellt werden Hochhäuser mit Baujahr ab 1900. 
+      Einige geplante Hochhäuser werden mit einem fiktiven Baujahr zwischen 2020 und 2024 angezeigt. 
+      Bei den Wohnhochhäusern handelt es sich um Gebäude mit einem Wohnanteil von ≥ 90% in den Obergeschossen.
+     <h3>Wie nutze ich die Anwendung?</h3>
+     <p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter, 
+       Microsoft Edge Version 17 oder älter funktioniert diese Anwendung möglicherweise nicht einwandfrei. 
+       Benutzen Sie in einem solchen Fall einen anderen Browser wie beispielsweise Google Chrome, Apple Safari oder Mozilla Firefox.</p>
+     <h4>Navigation</h4>
+     <p>Mit dem Scrollrad der Computermaus kann in die in die 3D-Karte rein- und rausgezoomt werden. Um die Ansicht nach links und rechts 
+       bzw. nach vorne und hinten zu verschieben, wird die gedrückte linke Maustaste verwendet. 
+       Mit der gedrückten rechten Maustaste kann die Ansicht gedreht werden.</p>
+     <h4>Selektion</h4>
+     <p>Die blau eingefärbten Gebäude können mit einem Mausklick selektiert werden. 
+       Im erscheinenden Fenster wird - falls vorhanden - der Name des Hochhauses, die Höhenangabe sowie das Baujahr eingeblendet. 
+       Die Hochhäuser können auch über die blauen Punkte im untenstehenden Diagramm ausgewählt werden: 
+       Mit einem Klick auf einen beliebigen Punkt wird das entsprechende Hochhaus auf der Karte gelb hervorgehoben. 
+       Oben links können die Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung 
+       (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html" target="_blank">BZO 2016</a>) ein- und ausgeblendet werden.</p>
+     <h4>Diagramm</h4>
+     <p>Neben der oben beschriebenen Selektion von Punkten bzw. Hochhäusern bietet das Diagramm weitere Funktionalitäten:
+     <ul>
+       <li>Zur gezielten Ein- und Ausblendung der Hochhäuser aus bestimmten Epochen können die untenstehenden Schaltflächen mit den Jahreszahlen verwendet werden.</li>
+       <li>Die rechtsstehenden Schaltflächen ermöglichen es, nur Wohnhochhäuser (Wohnanteil in Obergeschossen ≥ 90%) oder die höchsten 20 Gebäude anzeigen zu lassen.</li>
+       <li>Der obere und der untere Rand vom Diagramm lassen sich mit der linken Maustaste verschieben. 
+         So ist es möglich die Anzeige der Gebäude auf bestimmte Höhen zu begrenzen.</li>
+     </ul>
+     </div>
 
-                </div>
-            </a>
 
-            <div data-attach-point="headerLabel" class="header-label" >Hochhäuser</div>
-			<p id="Warnung"></p>
-        </div> 
-  <!-- Einbindung der BZO-Layer-Checkbox und der dazugehörigen Legende. BZO-Layer wird in Application.js eingebunden-->
-  <div id="layerToggle">
-     <input type="checkbox" id="HHGebieteLayer">
-	 <span>Hochhausgebiete gemäss Bau-</span><div style="margin-left:25px">und Zonenordnung (BZO)</div>
-	 <div>
-	   <image id="BZO" src="./img/BZO1.PNG">
-	   <span id="Legende">Hochhausgebiet I</span>
-	 </div>
-	 <div>
-	   <image id="BZO" src="./img/BZO2.PNG">
-	   <span id="Legende">Hochhausgebiet II</span>
-	 </div>
-	 <div>
-	    <image id="BZO" src="./img/BZO3.PNG">
-	   <span id="Legende">Hochhausgebiet III</span>
-	 </div>
-  </div>
-  
-  
-<div id="RechtContainer">
-    <span class="esri-icon-close" id="close1"></span>
-    <h2>Rechtliche Hinweise</h2>
-    <p>Diese interaktive Webanwendung wurde von der Stadt Zürich auf Basis der Anwendung 
-      <a href="https://github.com/Esri/Manhattan-skyscraper-explorer" target="_blank">"Manhattan Skyscraper Explorer"</a> von Raluca Nicola erstellt.
-      Der Code dieser Anwendung ist Open Source und auf <a href="https://github.com/gkzhbd/gkzhbd.github.io/tree/master/stadt_zuerich_hochhaeuser" target="_blank">Github</a> verfügbar.
-	<br><br> Folgende Bibliotheken, APIs und Datensätze werden genutzt:
-    <ul>
-      <li>3D-Karte: <a href=https://developers.arcgis.com/javascript/ target="_blank">ArcGIS API für JavaScript 4.11</a></li>
-      <li>Diagramm: <a href="https://d3js.org/" target="_blank">D3Js</a> </li>
-      <li>Daten: 
-	  <ul>
-		<li>3D-Gebäude: <a href="https://data.stadt-zuerich.ch/dataset?tags=3d-stadtmodell" target="_blank">3D-Stadtmodell</a> der Stadt Zürich</li>
-		<li>Baujahre: Gebäude- und Wohnungsregister der Stadt Zürich (GWZ)</li>
-		<li>Hintergrundkarte und Gelände: siehe Kartenfenster unten</li>
-	  </ul>
-	</ul>
-  Die Stadt Zürich kann nicht dafür einstehen, dass dieses elektronisches Informationsangebot sowie die angebotenen Funktionalitäten 
-  jederzeit störungsfrei benutzt und die abgefragten Informationen reibungslos und fehlerfrei übertragen werden können.
-  <br><br>
-  Die Stadt Zürich kann nicht gewährleisten, dass die von ihr auf dem Internet zur Verfügung gestellten Informationen 
-  jederzeit aktuell, detailgenau und vollständig sind und alle erdenklichen Sachverhalte berücksichtigen.
-	</p>
-  </div>
-  
-   <div id="ImprContainer">
-    <span class="esri-icon-close" id="close2"></span>
-    <h2>Impressum</h2>
-	<h3>Kontakt</h3>
-	<p><b>Amt für Städtebau</b><br>
-	Lindenhofstrasse 19<br>
-	Amtshaus IV<br>
-	8001 Zürich<br>
-	Telefon +41 44 412 11 11<br>
-	<a href="https://www.stadt-zuerich.ch/afs" target="_blank">https://www.stadt-zuerich.ch/afs</a>
-  </div>
-  
-  <div id="NutzungContainer">
-    <span class="esri-icon-close" id="close3"></span>
-    <h2>Nutzungshinweise</h2>
-    <h3> Was ist das für eine Anwendung?</h3>
-    <p>Die Anwendung zeigt eine gesamtstädtische Übersicht aller bestehenden und einige der geplanten Hochhäuser. 
-      Sie wurde als Grundlage für die Überprüfung und Aktualisierung der Hochhausrichtlinien und -gebiete erstellt.
-      Die Anwendung umfasst ein interaktives 3D-Kartentool, welches mit einem Diagramm zu Höhe und Baujahr der Gebäude verknüpft ist.</p>
-	<h3>Was sind Hochhäuser?</h3>
-  <p>Gemäss kantonalem Planungs- und Baugesetz (§282 PBG) sind Hochhäuser Gebäude mit einer Höhe von mehr als 25 m.</p>
-  <h3>Welche Hochhäuser sind dargestellt?</h3>
-  Datengrundlage bilden die Gebäude aus dem 
-  <a href="https://www.stadt-zuerich.ch/ted/de/index/geoz/geodaten_u_plaene/3d_stadtmodell.html" target="_blank">3D-Stadtmodell</a>
-   der Stadt Zürich, ergänzt mit den Baujahren aus dem Gebäude- und Wohnungsregister der Stadt Zürich. 
-   Farblich hervorgehoben und im Diagramm dargestellt werden Hochhäuser mit Baujahr ab 1900. 
-   Einige geplante Hochhäuser werden mit einem fiktiven Baujahr zwischen 2020 und 2024 angezeigt. 
-   Bei den Wohnhochhäusern handelt es sich um Gebäude mit einem Wohnanteil von ≥ 90% in den Obergeschossen.
-	<h3>Wie nutze ich die Anwendung?</h3>
-	<p>Die Anwendung ist nicht für mobile Geräte geeignet (Tablet, Smartphone). Für Microsoft Internet Explorer Version 11 oder älter, 
-    Microsoft Edge Version 17 oder älter funktioniert diese Anwendung möglicherweise nicht einwandfrei. 
-    Benutzen Sie in einem solchen Fall einen anderen Browser wie beispielsweise Google Chrome, Apple Safari oder Mozilla Firefox.</p>
-	<h4>Navigation</h4>
-	<p>Mit dem Scrollrad der Computermaus kann in die in die 3D-Karte rein- und rausgezoomt werden. Um die Ansicht nach links und rechts 
-    bzw. nach vorne und hinten zu verschieben, wird die gedrückte linke Maustaste verwendet. 
-    Mit der gedrückten rechten Maustaste kann die Ansicht gedreht werden.</p>
-	<h4>Selektion</h4>
-	<p>Die blau eingefärbten Gebäude können mit einem Mausklick selektiert werden. 
-    Im erscheinenden Fenster wird - falls vorhanden - der Name des Hochhauses, die Höhenangabe sowie das Baujahr eingeblendet. 
-    Die Hochhäuser können auch über die blauen Punkte im untenstehenden Diagramm ausgewählt werden: 
-    Mit einem Klick auf einen beliebigen Punkt wird das entsprechende Hochhaus auf der Karte gelb hervorgehoben. 
-    Oben links können die Hochhausgebiete gemäss der aktuellen kommunalen Bau- und Zonenordnung 
-    (<a href="https://www.stadt-zuerich.ch/hbd/de/index/staedtebau/planung/bzo.html" target="_blank">BZO 2016</a>) ein- und ausgeblendet werden.</p>
-	<h4>Diagramm</h4>
-	<p>Neben der oben beschriebenen Selektion von Punkten bzw. Hochhäusern bietet das Diagramm weitere Funktionalitäten:
-	<ul>
-		<li>Zur gezielten Ein- und Ausblendung der Hochhäuser aus bestimmten Epochen können die untenstehenden Schaltflächen mit den Jahreszahlen verwendet werden.</li>
-		<li>Die rechtsstehenden Schaltflächen ermöglichen es, nur Wohnhochhäuser (Wohnanteil in Obergeschossen ≥ 90%) oder die höchsten 20 Gebäude anzeigen zu lassen.</li>
-		<li>Der obere und der untere Rand vom Diagramm lassen sich mit der linken Maustaste verschieben. 
-      So ist es möglich die Anzeige der Gebäude auf bestimmte Höhen zu begrenzen.</li>
-	</ul>
-  </div>
-  <div id="footer">
-		© 2019 Stadt Zürich
-				<a id="RechtLink" style="padding-left:1.8em">Rechtliche Hinweise</a>
-				<a id="NutzungLink" style="padding-left:1.8em">Nutzungshinweise</a>
-				<a id="ImprLink" style="padding-left:1.8em">Impressum</a>
-</div>
-</body>
-</html>
+     <div id="footer">
+             
+     <span id="anonymousPanel">
+         <span id="sign-in" class="action">Anmelden</span> für Zugriff auf Karte.
+     </span>
+     
+       <span id="personalizedPanel" style="display: none">
+         Geschützter Bereich <span id="userId" style="font-weight: bold;"></span> &nbsp;-&nbsp;
+         <span id="sign-out" class="action">Abmelden</span>
+       </span>
+       
+       <span id="PopUpLinks" style="right: 30px">© 2019 Stadt Zürich
+           <a id="RechtLink" style="padding-left:1.8em">Rechtliche Hinweise</a>
+           <a id="NutzungLink" style="padding-left:1.8em">Nutzungshinweise</a>
+           <a id="ImprLink" style="padding-left:1.8em">Impressum</a>
+       </span>
+   </div>
+   </body>
+   </html>
+   
+   

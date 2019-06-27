@@ -37,12 +37,29 @@ body {
   font-weight: bold;
 }
 
+
 #footer {
-  position: absolute;
-  right: 30px;
-  bottom: 3px;
   font-size: 12px;
-}	
+}
+
+#PopUpLinks {
+  position: absolute;
+  bottom: 3px;
+  right: 30px;
+}
+
+#anonymousPanel {
+  position: absolute;
+  bottom: 3px;
+  left: 10px;
+}
+
+#personalizedPanel {
+  position: absolute;
+  bottom: 3px;
+  left: 10px;
+}
+
 .header-logo-container {
     height: 46px;
     transition: height 0.3s ease-out;
@@ -455,13 +472,6 @@ path.domain, .tick line {
   display: none;
 }
 
-#impressumContainer .esri-icon-close {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  cursor: pointer;
-}
-
 #impressumContainer li {
   padding: 10px;
 }
@@ -475,7 +485,7 @@ path.domain, .tick line {
 
 /* Popups */
 
-#RechtContainer, #ImprContainer, #NutzungContainer {
+#RechtContainer, #ImprContainer, #NutzungContainer, #info_container {
   position: absolute;
   left: 0;
   right: 0;
@@ -494,14 +504,14 @@ path.domain, .tick line {
   overflow: auto;
 }
 
-#RechtContainer .esri-icon-close, #ImprContainer .esri-icon-close, #NutzungContainer .esri-icon-close {
+#RechtContainer .esri-icon-close, #ImprContainer .esri-icon-close, #NutzungContainer .esri-icon-close, #info_container .esri-icon-close {
   position: absolute;
   right: 20px;
   top: 20px;
   cursor: pointer;
 }
 
-#RechtContainer li, #ImprContainer li, #NutzungContainer li {
+#RechtContainer li, #ImprContainer li, #NutzungContainer li, #info_container li {
   padding: 10px;
 }
 
@@ -509,8 +519,6 @@ path.domain, .tick line {
 #Legende {
 	font-size:12px;
 }
-
-
 
 #BZO {
 width: 30px; 
@@ -523,9 +531,20 @@ margin-bottom: 3px;
 margin-left: 26px;
 }
 
+#info1, #info2 {
+  width: 15px; 
+  height: 15px; 
+  text-align: right; 
+  vertical-align: middle; 
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  cursor: pointer;
+  }
+
 .action {
   color: blue;
   cursor: pointer;
   text-decoration: underline;
 }
-

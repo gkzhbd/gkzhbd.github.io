@@ -19,21 +19,21 @@
    limitations under the License.*/
 
 /*
- * Title: Manhattan Skyscraper Explorer Main Application
- * Author: Raluca Nicola
- * Date: 07/06/17
- * Description: Main application file where the UI and scene view are loaded
- */
+* Title: Manhattan Skyscraper Explorer Main Application
+* Author: Raluca Nicola
+* Date: 07/06/17
+* Description: Main application file where the UI and scene view are loaded
+*/
 
 define([
   "dojo/_base/declare",
   "esri/core/Accessor",
-  
-  "esri/portal/Portal",
+
   "esri/identity/OAuthInfo",
   "esri/identity/IdentityManager",
+
   "esri/Map",
-  "esri/Basemap",
+ "esri/Basemap",
   "esri/views/SceneView",
   "esri/layers/ElevationLayer",
   "esri/layers/SceneLayer",
@@ -54,8 +54,8 @@ define([
   "dojo/dom",
   "dojo/on",
   "dojo/query"
-], function(declare, Accessor,
-  Portal, OAuthInfo, identityManager, Map, Basemap, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils, Ground,
+], function(declare, Accessor, OAuthInfo, identityManager,
+  Map, Basemap, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils, Ground,
   RendererGenerator, HeightGraph, Timeline, InfoWidget, labels, searchWidget, categorySelection,
   dom, on, domQuery
 ) {
@@ -84,54 +84,60 @@ define([
      */
 
     init: function(containers) {
-		
+
       var settings = this.settings;
       var state = this.state;
+
+              // ArcGIS Enterprise Portals are also supported
+              var portalUrl = "https://stzh.maps.arcgis.com/sharing";
+
+              // subsitute your own client_id to identify who spawned the login and check for a matching redirect URI
+              var info = new OAuthInfo({
+                appId: "qId0bkDT56ClVrLR",
+                popup: true // inline redirects don't require any additional app configuration
+              });
+              identityManager.registerOAuthInfos([info]);
+
+        
+        identityManager.checkSignInStatus(portalUrl).catch(function(){
+          identityManager.getCredential(portalUrl);
+        });
+
+        // send users to arcgis.com to login
+        on(dom.byId("sign-in"), "click", function() {
+          identityManager.getCredential(portalUrl);
+        });
+  
+        // log out and reload
+        on(dom.byId("sign-out"), "click", function() {
+          identityManager.destroyCredentials();
+          window.location.reload();
+        });
+
+      // persist logins when the page is refreshed
+      identityManager.checkSignInStatus(portalUrl).then(
+        function() {
+          dom.byId('anonymousPanel').style.display = 'none';
+          dom.byId('personalizedPanel').style.display = 'block'
+
+          // display the map once the user is logged in
+          displayMapAfterAuthetication(containers, settings, state);
+        } 
+      )  
+      
+    //  displayMapAfterAuthetication(containers, settings, state);
+    }
+  });
+
+    function displayMapAfterAuthetication (containers, settings, state) {
 
       var buildings,
         heightGraph, timeline,
         selectHighlight, hoverHighlight;
       
-      //*** START SECURITY ***
-      // ArcGIS Enterprise Portals are also supported
-      var portalUrl = "https://stzh.maps.arcgis.com/sharing";
-
-      var info = new OAuthInfo({
-        appId: "qId0bkDT56ClVrLR",
-        popup: false // inline redirects don't require any additional app configuration
-      });
-      identityManager.registerOAuthInfos([info])
-
-      // send users to arcgis.com to login
-       on(dom.byId("sign-in"), "click", function() {
-       identityManager.getCredential(portalUrl);
-      });
-
-      // log out and reload
-      on(dom.byId("sign-out"), "click", function() {
-      identityManager.destroyCredentials();
-      window.location.reload();
-      });
-
-      // persist logins when the page is refreshed
-      identityManager.checkSignInStatus(portalUrl).then(
-      function() {
-        dom.byId('anonymousPanel').style.display = 'none';
-          dom.byId('personalizedPanel').style.display = 'block'
-
-          // display the map once the user is logged in
-          displayMap();
-        });
-      
-      //*** ENDE SECURITY ***
 
       // create map
-      function displayMap() {
-        var portal = new Portal();
 
-          // Once the portal has loaded, the user is signed in
-          portal.load().then(function() {
-            dom.byId('viewDiv').style.display = 'flex';
       var basemap = new Basemap({
         portalItem: {
           id: "eb443aa9a2384c8ea53c8dbaf8beb8d0"
@@ -150,7 +156,7 @@ define([
       });
 
       var map = new Map({
-        basemap: "topo",
+       basemap: "topo",
         ground: ground
       });
 
@@ -163,7 +169,7 @@ define([
         },
         camera: {
           position: {
-            x: 8.54891918,
+           x: 8.54891918,
             y: 47.3455014,
             z: 1061.2
           },
@@ -176,7 +182,7 @@ define([
             mode: "manual"
           }
         },
-        highlightOptions: this.settings.highlightOptions,
+        highlightOptions: settings.highlightOptions,
         popup: {
           dockEnabled: true,
           dockOptions: {
@@ -189,17 +195,16 @@ define([
           lighting: {
             ambientOcclusionEnabled: true,
             directShadowsEnabled: true,
-			date: new Date("Tue Jun 21 2019 10:00:00 GMT+0100 (CET)")
+      date: new Date("Tue Jun 21 2019 10:00:00 GMT+0100 (CET)")
           }
         }
       });
-    
     
       /*watchUtils.whenFalse(view, "updating", function (evt) {
         dom.byId("loading").style.display = "none";
       });*/
       
-	  // remove navigation widgets from upper left corner
+    // remove navigation widgets from upper left corner
     view.ui.move(["zoom", "compass"], "bottom-left");
     view.ui.empty("top-left");
 
@@ -218,9 +223,9 @@ define([
         outFields: ["*"],
         //definitionExpression: definitionExpression
 
-	  });
+    });
 
-      var rendererGen = new RendererGenerator(this.settings, sceneLayer, "CNSTRCT_YR", state);
+      var rendererGen = new RendererGenerator(settings, sceneLayer, "CNSTRCT_YR", state);
 
       // feature layer with centroids of buildings - displayed on top of buildings to show which buildings contain information from wikipedia
       var infoPoints = new FeatureLayer({
@@ -238,26 +243,39 @@ define([
         },
         //renderer: rendererGen.createUniqueValueRenderer("WIKI", {value: 1, image: "./img/wiki.png"}),
         //visible: false,
-		definitionExpression: "(GEBAEUDETYP = 'Hochhaus PBG' OR GEBAEUDETYP = 'Hochhaus Studie') AND CNSTRCT_YR >= " + settings.buildingOptions.minCnstrctYear + " AND CNSTRCT_YR <= " + settings.buildingOptions.maxCnstrctYear
+    definitionExpression: "(GEBAEUDETYP = 'Hochhaus PBG' OR GEBAEUDETYP = 'Hochhaus Studie') AND CNSTRCT_YR >= " + settings.buildingOptions.minCnstrctYear + " AND CNSTRCT_YR <= " + settings.buildingOptions.maxCnstrctYear
       });
-	  
-	  // BZO Hochhausgebiete
-	  var HHGebiete = new FeatureLayer({
-		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/BZO_Hochhausgebiet_neu/FeatureServer",
-		 opacity: 0.85,
-		 visible: false
-	  });
-	  
-      map.addMany([sceneLayer/*, infoPoints*/, HHGebiete/*, Verdichtung*/]);
-	  
-	  var HHGebieteToggle = dom.byId("HHGebieteLayer");
-	  
-	  // Listen to the onchange event for the checkbox
-      on(HHGebieteToggle, "change", function(){
+    
+    // BZO Hochhausgebiete
+    var HHGebiete = new FeatureLayer({
+     url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/AFS_SDE_BZO_HOCHHAUSGEBIET_V/FeatureServer",
+     opacity: 0.85,
+     visible: false
+    });
+
+    // BZO-Nutzungsplan
+    var BZO_Zonen = new FeatureLayer({
+      url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Zonenplan_BZO/FeatureServer",
+      opacity: 0.85,
+      visible: false
+     });
+    
+      map.addMany([sceneLayer, BZO_Zonen, HHGebiete]);
+    
+    var HHGebieteToggle = dom.byId("HHGebieteLayer");
+    var BZO_ZonenToggle = dom.byId("BZO_ZonenLayer");
+    
+    // Listen to the onchange event for the checkbox
+    on(HHGebieteToggle, "change", function(){
       // When the checkbox is checked (true), set the layer's visibility to true
-		HHGebiete.visible = HHGebieteToggle.checked;
-	  });
-	  
+    HHGebiete.visible = HHGebieteToggle.checked;
+    });
+
+    // Listen to the onchange event for the checkbox
+    on(BZO_ZonenToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+      BZO_Zonen.visible = BZO_ZonenToggle.checked;
+    });
     
 
       // initialize info widget
@@ -288,12 +306,13 @@ define([
       }
 
       state.watch("selectedPeriod", function(newPeriod) {
+        var newCategory = state.selectedCategory;
         // update building symbology
           rendererGen.applyClassBreaksRenderer(newPeriod);
         // update height graph
-        heightGraph.updatePeriod(newPeriod);
+        heightGraph.updatePeriod(newPeriod, newCategory);
         // update timeline
-          timeline.update(newPeriod);
+        timeline.update(newPeriod);
 
       });
 
@@ -376,7 +395,7 @@ define([
           });
         })
         .otherwise(error);
-
+      
       state.watch("filteredBuildings", function(newFilter) {
         // generate a new definition expression based an the new filter
         var defExp = generateDefinitionExpression(newFilter);
@@ -451,8 +470,7 @@ define([
         })[0];
         return feature;
       }
-    });
-    }
+
       // remove hovered building when mouse is outside of map
       on(dom.byId("menuDiv"), "mouseenter", function() {
         state.hoveredBuilding = null;
@@ -460,64 +478,69 @@ define([
       on(domQuery(".esri-popup__main-container"), "mouseenter", function() {
         state.hoveredBuilding = null;
       });
-	  
-	  // add events for rechtliche Hinweise
+    
+    // add events for rechtliche Hinweise
       on(dom.byId("RechtLink"), "click", function() {
         dom.byId("RechtContainer").style.display = "inline";
+        dom.byId("NutzungContainer").style.display = "none";
+        dom.byId("info_container").style.display = "none";
+        dom.byId("ImprContainer").style.display = "none";
       });
       on(dom.byId("close1"), "click", function() {
         dom.byId("RechtContainer").style.display = "none";
       });
-	  
-	  // add events for Impressum window
+    
+    // add events for Impressum window
       on(dom.byId("ImprLink"), "click", function() {
         dom.byId("ImprContainer").style.display = "inline";
+        dom.byId("NutzungContainer").style.display = "none";
+        dom.byId("info_container").style.display = "none";
+        dom.byId("RechtContainer").style.display = "none";
       });
       on(dom.byId("close2"), "click", function() {
         dom.byId("ImprContainer").style.display = "none";
       });
-	  
-	  // add events for Nutzungshinweise
+    
+    // add events for Nutzungshinweise
       on(dom.byId("NutzungLink"), "click", function() {
         dom.byId("NutzungContainer").style.display = "inline";
+        dom.byId("info_container").style.display = "none";
+        dom.byId("ImprContainer").style.display = "none";
+        dom.byId("RechtContainer").style.display = "none";
       });
       on(dom.byId("close3"), "click", function() {
         dom.byId("NutzungContainer").style.display = "none";
       });
-	  
-	  // schliessen von PopUps beim Öffnen von anderen PopUps
-      on(dom.byId("ImprLink"), "click", function() {
-        dom.byId("NutzungContainer").style.display = "none";
-      });
-	  on(dom.byId("RechtLink"), "click", function() {
-        dom.byId("NutzungContainer").style.display = "none";
-      });
-	  on(dom.byId("NutzungLink"), "click", function() {
-        dom.byId("ImprContainer").style.display = "none";
-      });
-	  on(dom.byId("RechtLink"), "click", function() {
-        dom.byId("ImprContainer").style.display = "none";
-      });
-	  on(dom.byId("ImprLink"), "click", function() {
-        dom.byId("RechtContainer").style.display = "none";
-      });
-	  on(dom.byId("NutzungLink"), "click", function() {
-        dom.byId("RechtContainer").style.display = "none";
-      });
+
+    // add events for Legende
+    on(dom.byId("info1"), "click", function() {
+      dom.byId("info_container").style.display = "inline";
+      dom.byId("NutzungContainer").style.display = "none";
+      dom.byId("ImprContainer").style.display = "none";
+      dom.byId("RechtContainer").style.display = "none";
+    });
+    on(dom.byId("info2"), "click", function() {
+      dom.byId("info_container").style.display = "inline";
+      dom.byId("NutzungContainer").style.display = "none";
+      dom.byId("ImprContainer").style.display = "none";
+      dom.byId("RechtContainer").style.display = "none";
+    });
+    on(dom.byId("close4"), "click", function() {
+      dom.byId("info_container").style.display = "none";
+    });
     }
-  });
 
   function generateDefinitionExpression(filter) {
-	  var minConstructionYear = 0
-	  var maxConstructionYear = 5000
-	  
-	  if (filter[2] !== undefined) {
-		  minConstructionYear = filter[2]
-	  }
-	  if (filter[3] !== undefined) {
-		  maxConstructionYear = filter[3]
-	  }
-	  
+    var minConstructionYear = 0
+    var maxConstructionYear = 5000
+    
+    if (filter[2] !== undefined) {
+      minConstructionYear = filter[2]
+    }
+    if (filter[3] !== undefined) {
+      maxConstructionYear = filter[3]
+    }
+    
     return "HEIGHTROOF > " + filter[0] + " AND " +
       "HEIGHTROOF < " + filter[1] + " AND " +
       "CNSTRCT_YR >= " + minConstructionYear + " AND CNSTRCT_YR <= " + maxConstructionYear;
