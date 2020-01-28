@@ -78,23 +78,5 @@ define([
         }
       
     },
-
-    //Deaktivierung des Zeitselektion bei aktivierten Category-Buttons
-    /*applyCategory: function(selectedCategory) {
-      if (selectedCategory !== "all") {
-        for (var i = 0; i < 6; i++) {
-          buttonStyle = dom.byId("period-" + i).style;
-          buttonStyle.backgroundColor = "rgb(" + this.settings.ageClasses[i].color.join(",") + ")";
-          buttonStyle.color = "#fff";
-        }
-      }
-      else {
-        for (var i = 0; i < 6; i++) {
-          buttonStyle = dom.byId("period-" + i).style;
-          buttonStyle.backgroundColor = newPeriod[i] ? "rgb(" + this.settings.ageClasses[i].color.join(",") + ")" : "rgba(" + this.settings.defaultColor.join(",") + ")";
-          buttonStyle.color = newPeriod[i] ? "#fff" : "#777";
-        }
-      }
-    }*/
   });
 });

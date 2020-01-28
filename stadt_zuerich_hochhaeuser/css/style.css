@@ -27,7 +27,7 @@ html, body {
 
 body {
   width: 100%;
-  min-width: 1400px;
+  min-width: 1260px;
 }
 
 #headerDiv {
@@ -37,22 +37,38 @@ body {
   font-weight: bold;
 }
 
+
 #footer {
-  position: absolute;
-  right: 30px;
-  bottom: 3px;
   font-size: 12px;
-}	
+}
+
+#PopUpLinks {
+  position: absolute;
+  bottom: 3px;
+  right: 30px;
+}
+
+#anonymousPanel {
+  position: absolute;
+  bottom: 3px;
+  left: 10px;
+}
+
+#personalizedPanel {
+  position: absolute;
+  bottom: 3px;
+  left: 10px;
+}
+
 .header-logo-container {
     height: 46px;
     transition: height 0.3s ease-out;
 }
-.text-white {
-    color: #FFFFFF;
-}
-.bg-blue {
+
+
+#bg-blue {
 	width: 320px;
-	height: 165px;
+	height: 110px;
 	position: absolute;
     background: #0070BC;
     color: white;
@@ -91,7 +107,7 @@ body {
   top: 0;
   bottom: 255px;
   width: 100%;
-  min-width: 1400px;
+  min-width: 1260px;
 }
 
 #timeWrap {
@@ -104,7 +120,7 @@ body {
   left: 0;
   right: 0;
   height: 255px;
-  min-width: 1400px;
+  min-width: 1000px;
   background-color: rgba(255,255,255,1);
   box-shadow: 1px 1px 35px 0 rgba(100,100,100,0.8);
 }
@@ -117,7 +133,7 @@ body {
 }
 
 #timeDiv {
-  left: -30px;
+  left: -55px;
   transform-origin: left;
 }
 
@@ -125,11 +141,12 @@ body {
   background-color: #0070BC;
   position: absolute;
   left: 25px; 
-  top: 50px;
+  top: 40px;
   padding: 5px;
   color: white;
   font-family: "Helvetica";
-  width: 260px;
+  width: 280px;
+  /*display: none;*/
 }
 
 svg {
@@ -164,12 +181,12 @@ button {
   border-right-color:rgb(000, 112, 188);
   border-top: 14px solid transparent;
   border-bottom: 14px solid transparent;
-  border-left: 20px solid transparent
+  border-left: 0px solid transparent
 }
 
 #timeDiv button {
   background-color: white;
-  width: 177px;
+  width: 176px;
   margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 3px;
@@ -177,7 +194,7 @@ button {
 }
 
 #timeDiv button#period-0 {
-  width: 90px;
+  width: 85px;
   position: relative;
 }
 
@@ -259,7 +276,7 @@ button {
 
 #categoryDiv {
   position: absolute;
-  left: 1090px;
+  left: 1095px;
   top: 10px;
 }
 
@@ -268,7 +285,7 @@ button {
   display: block;
   margin-top: 10px;
   padding: 5px 12px;
-  width: 200px;
+  width: 180px;
 }
 
 
@@ -455,13 +472,6 @@ path.domain, .tick line {
   display: none;
 }
 
-#impressumContainer .esri-icon-close {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  cursor: pointer;
-}
-
 #impressumContainer li {
   padding: 10px;
 }
@@ -475,7 +485,7 @@ path.domain, .tick line {
 
 /* Popups */
 
-#RechtContainer, #ImprContainer, #NutzungContainer {
+#RechtContainer, #ImprContainer, #NutzungContainer, #LayerContainer {
   position: absolute;
   left: 0;
   right: 0;
@@ -483,7 +493,6 @@ path.domain, .tick line {
   width: 600px;
   height: 60%;
   margin: 50px auto 0 auto;
-  background-color: #fff;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.8);
   z-index: 10000;
@@ -494,32 +503,97 @@ path.domain, .tick line {
   overflow: auto;
 }
 
-#RechtContainer .esri-icon-close, #ImprContainer .esri-icon-close, #NutzungContainer .esri-icon-close {
+#info_container_BZO, #info_container_HH, #info_container_Strassen, #info_container_Zentren, #info_container_Dichte, #info_container_Verdichtung {
+  position: absolute;
+  bottom: 255px;
+  left: 0;
+  top: 60px;
+  width: 280px;
+  margin: 50px auto 0 auto;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  z-index: 1000;
+  display: none;
+  font-family: "Helvetica";
+  text-align: justify;
+  overflow: auto;
+}
+
+#RechtContainer .esri-icon-close, #ImprContainer .esri-icon-close, #NutzungContainer .esri-icon-close, #info_container_BZO .esri-icon-close, #info_container_HH .esri-icon-close, #info_container_Strassen .esri-icon-close, #info_container_Zentren .esri-icon-close, #info_container_Dichte .esri-icon-close, #info_container_Verdichtung .esri-icon-close {
   position: absolute;
   right: 20px;
   top: 20px;
   cursor: pointer;
 }
 
-#RechtContainer li, #ImprContainer li, #NutzungContainer li {
+#layerToggle .esri-icon-close, #environmentDiv .esri-icon-close {
+  position: absolute;
+  right: 17px;
+  top: -10px;
+  cursor: pointer;
+}
+
+#RechtContainer li, #ImprContainer li, #NutzungContainer li, #info_container li {
   padding: 10px;
 }
 
 
 #Legende {
-	font-size:12px;
+  font-size:12px;
+  text-align: left;
 }
-
-
 
 #BZO {
 width: 30px; 
 height: 15px; 
-text-align: center; 
 vertical-align: middle; 
 margin-right: 10px;
 margin-top: 3px;
 margin-bottom: 3px;
-margin-left: 26px;
+margin-left: 5px;
 }
 
+#info1, #info2, #info3, #info4, #info5, #info6 {
+  width: 20px; 
+  height: 12px; 
+  vertical-align: middle; 
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  cursor: pointer;
+  float: right;
+}
+
+.action {
+  color:  rgb(000, 112, 188);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#Layerbezeichnung {
+  line-height: 1.5;
+  }
+
+#Toggle {
+  margin-bottom: 10px;
+}
+
+#environmentDiv {
+  background-color: #0070BC;
+  position: absolute;
+  left: 25px; 
+  top: 50px;
+  padding: 5px;
+  color: white;
+  font-family: "Helvetica";
+  width: 280px;
+  display: none;
+}
+
+#symbole {
+  position: absolute;
+  top: 40px;
+  left: 55px;
+  cursor: pointer;
+  vertical-align: middle;
+}

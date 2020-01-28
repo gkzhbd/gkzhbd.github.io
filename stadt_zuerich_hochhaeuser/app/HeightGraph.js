@@ -34,9 +34,9 @@ define([
     constructor: function(container, settings, features, state) {
 
       // general settings for the svg area
-      this.width = 1070;
+      this.width = 1043;
       this.height = document.getElementById(container).clientHeight;
-      this.paddingLeft = 160;
+      this.paddingLeft = 135;
       this.paddingTop = 20;
       this.paddingBottom = 15;
       this.ageClasses = settings.ageClasses;
@@ -375,10 +375,32 @@ define([
     },
 
     // color the buildings according to the new selected period
-    updatePeriod: function(newPeriod) {
+    updatePeriod: function(newPeriod, newCategory) {
       for (var i = 0; i < newPeriod.length; i++) {
         this.circles.filter(".construct-" + i)
-          .attr("fill", newPeriod[i] ? "rgba(" + this.ageClasses[i].color.join(",") + ",0.8)" : "rgba(" + this.defaultColor.join(",") + ")");
+          .attr("fill", function(d) {
+            if (newCategory === "geplant") {
+              if (newPeriod[i] === true) {
+                if (d.attributes.cnstrct_yr > 2019) {
+                  return "rgba(71, 181, 255, 0.8)";
+                }
+                else {
+                  return "rgba(000, 112, 188, 0.8)";
+                }
+              }
+              else {
+                return "rgba(255, 255, 255, 0.8)";
+              }
+            }
+            else {
+              if (newPeriod[i] === true) {
+                return "rgba(000, 112, 188, 0.8)";
+              }
+              else {
+                return "rgba(255, 255, 255, 0.8)";
+              }
+            }
+          });
       }
     },
 
@@ -395,7 +417,7 @@ define([
     },
 
     // change the points when a category is selected
-    applyCategory: function(newCategory){
+    applyCategory: function(newCategory, newPeriod){
       if (newCategory === "all") {
         this.circles.attr("r",  function(d) {
             if (d.attributes.cnstrct_yr < 1900) {
@@ -412,19 +434,57 @@ define([
             else {
               return 1
             };
-          });
+          })
+          .attr("fill", function(d) {
+            var i, ageMin = [1000, 1900, 1925, 1950, 1975, 2000], ageMax = [1899, 1924, 1949, 1974, 1999, 2025];
+            for (i = 0; i < newPeriod.length; i++) {
+              if  ((d.attributes.cnstrct_yr > (ageMin[i] - 1)) && (d.attributes.cnstrct_yr < (ageMax[i]+ 1))) {
+                if  (newPeriod[i] === true){
+                  return "rgba(000, 112, 188, 0.8)"
+                }
+                else {
+                  return "rgba(255, 255, 255, 0.8)"
+                }
+              } 
+            }
+          })
       }
-      /*else if (newCategory === "geplant") {
+      else if (newCategory === "geplant") {
         this.circles.attr("fill", function(d) {
-          if (d.attributes.cnstrct_yr > 2019) {
-            return "rgba(71, 181, 255, 0.8)";
-          }
-          else {
-            return "rgba(000, 112, 188, 0.8)";
+          var i, ageMin = [1000, 1900, 1925, 1950, 1975, 2000], ageMax = [1899, 1924, 1949, 1974, 1999, 2025];
+          for (i = 0; i < newPeriod.length; i++) {
+            if  ((d.attributes.cnstrct_yr > (ageMin[i] - 1)) && (d.attributes.cnstrct_yr < (ageMax[i]+ 1))) {
+              if  (newPeriod[i] === true){
+                if (d.attributes.cnstrct_yr > 2019) {
+                  return "rgba(71, 181, 255, 0.8)";
+                }
+                else {
+                  return "rgba(000, 112, 188, 0.8)";
+                }
+              }
+              else {
+                return "rgba(255, 255, 255, 0.8)"
+              }
+            } 
           }
         })
-        .attr("r", 3.5);
-      }*/
+        .attr("opacity", function(d){
+          if (d.attributes.cnstrct_yr < 1900) {
+            return 0
+          }
+          else {
+            return 1
+          };
+        })
+        .attr("r",  function(d) {
+          if (d.attributes.cnstrct_yr < 1900) {
+            return 1
+          }
+          else {
+            return 3.5
+          };
+        })
+      }
       else {
         var property = (newCategory === "info") ? "wohnhochhaus" : "top20";
         this.circles.attr("opacity", function(d) {
@@ -433,6 +493,19 @@ define([
           }
           else {
             return 0;
+          }
+        })
+        .attr("fill", function(d) {
+          var i, ageMin = [1000, 1900, 1925, 1950, 1975, 2000], ageMax = [1899, 1924, 1949, 1974, 1999, 2025];
+          for (i = 0; i < newPeriod.length; i++) {
+            if  ((d.attributes.cnstrct_yr > (ageMin[i] - 1)) && (d.attributes.cnstrct_yr < (ageMax[i]+ 1))) {
+              if  (newPeriod[i] === true){
+                return "rgba(000, 112, 188, 0.8)"
+              }
+              else {
+                return "rgba(255, 255, 255, 0.8)"
+              }
+            } 
           }
         })
         .attr("r", function(d) {

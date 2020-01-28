@@ -98,21 +98,32 @@ define([
       this.applyCategory(this.state.selectedCategory, this.state.selectedPeriod);
     },
 
+
   //Spezialrenderer fuer Kategorieauswahl (rechter Rand). Falls Button gewählt wird, werden die oberen Renderer entsprechend den Einstellung des Spezialrenderers übersteuert.
     applyCategory: function(category, newPeriod) {
-      var field, renderer = this.layer.renderer.clone(), Period = new Array(6), filter_yr = new Array(6), expression;
-      for (var i = 0; i < newPeriod.length; i++) {
-            Period[i] = newPeriod[i] ? 1 : 0;
-            filter_yr[i] = "(($feature.cnstrct_yr >" + (this.ageClasses[i].minValue - 1) + ") && ($feature.cnstrct_yr < " + (this.ageClasses[i].maxValue + 1) + ")) {" + Period[i] + " * $feature."
-      };
-      //alert(filter_yr);
+      var field, renderer = this.layer.renderer.clone(), expression;
       if (category === "all") {
         renderer.visualVariables = null;
       }
-      /*else if (category === "geplant") {
+      else if (category === "geplant") {
+        field = "CNSTRCT_YR"
+        expression =  `
+          if (($feature.cnstrct_yr >` + (this.ageClasses[0].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[0].maxValue + 1) + `))
+            {` + newPeriod[0] + ` * $feature.` + field + `}
+          else if (($feature.cnstrct_yr >` + (this.ageClasses[1].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[1].maxValue + 1) + `))
+            {` + newPeriod[1] + ` * $feature.` + field + `}
+          else if (($feature.cnstrct_yr >` + (this.ageClasses[2].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[2].maxValue + 1) + `))
+            {` + newPeriod[2] + ` * $feature.` + field + `}
+          else if (($feature.cnstrct_yr >` + (this.ageClasses[3].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[3].maxValue + 1) + `))
+            {` + newPeriod[3] + ` * $feature.` + field + `}
+          else if (($feature.cnstrct_yr >` + (this.ageClasses[4].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[4].maxValue + 1) + `))
+            {` + newPeriod[4] + ` * $feature.` + field + `}
+          else if (($feature.cnstrct_yr >` + (this.ageClasses[5].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[5].maxValue + 1) + `))
+            {` + newPeriod[5] + ` * $feature.` + field + `}`
+            
         renderer.visualVariables = [{
           type: "color",
-          field: "CNSTRCT_YR",
+          valueExpression: expression,
           stops: [{
             value: 1,
             color: this.defaultColor
@@ -127,20 +138,44 @@ define([
             color: [71, 181, 255]
           }]
         }];
-      }*/
+      }
 
       else {
         if (category === "info") {
-          field = "wohnhochhaus";
-          expression = "if " + filter_yr[0] + field + "} else if "+ filter_yr[1] + field + "} else if "+ filter_yr[2] + field + "} else if " + filter_yr[3] + field + "} else if "+ filter_yr[4] + field + "} else if "+ filter_yr[5] + field + "}";
+          field = "wohnhochhaus"
+          expression = `
+            if (($feature.cnstrct_yr >` + (this.ageClasses[0].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[0].maxValue + 1) + `))
+              {` + newPeriod[0] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[1].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[1].maxValue + 1) + `))
+              {` + newPeriod[1] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[2].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[2].maxValue + 1) + `))
+              {` + newPeriod[2] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[3].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[3].maxValue + 1) + `))
+              {` + newPeriod[3] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[4].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[4].maxValue + 1) + `))
+              {` + newPeriod[4] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[5].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[5].maxValue + 1) + `))
+              {` + newPeriod[5] + ` * $feature.` + field + `}`
         }
         else {
           field = "top20";
-          expression = "if " + filter_yr[0] + field + "} else if "+ filter_yr[1] + field + "} else if "+ filter_yr[2] + field + "} else if " + filter_yr[3] + field + "} else if "+ filter_yr[4] + field + "} else if "+ filter_yr[5] + field + "}";
+          expression = `
+            if (($feature.cnstrct_yr >` + (this.ageClasses[0].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[0].maxValue + 1) + `))
+              {` + newPeriod[0] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[1].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[1].maxValue + 1) + `))
+              {` + newPeriod[1] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[2].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[2].maxValue + 1) + `))
+              {` + newPeriod[2] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[3].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[3].maxValue + 1) + `))
+              {` + newPeriod[3] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[4].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[4].maxValue + 1) + `))
+              {` + newPeriod[4] + ` * $feature.` + field + `}
+            else if (($feature.cnstrct_yr >` + (this.ageClasses[5].minValue - 1) + `) && ($feature.cnstrct_yr < ` + (this.ageClasses[5].maxValue + 1) + `))
+              {` + newPeriod[5] + ` * $feature.` + field + `}`
         }
         renderer.visualVariables = [{
           type: "color",
-          valueExpression: expression,
+          valueExpression: expression, //valueExpression defines the building that should be rendered. It has to be an Arcade-Expression within a string --> https://developers.arcgis.com/javascript/latest/guide/arcade/index.html
           stops: [{
             value: 0,
             color: this.defaultColor
@@ -152,19 +187,6 @@ define([
       }
       this.layer.renderer = renderer;
     },
-
-    /*ProjectedBuildings: function() {
-      renderer = this.layer.renderer.clone();
-      renderer.visualVariables = [{
-        type: "color",
-        field: "CNSTRCT_YR"
-        stops: [{
-          value: 2019,
-          color: [255, 255, 0]
-        }]
-      }]
-    }*/
-
 
     /*createUniqueValueRenderer: function(field, uniqueValues) {
 

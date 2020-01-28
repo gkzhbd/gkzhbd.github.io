@@ -19,18 +19,19 @@
    limitations under the License.*/
 
 /*
- * Title: Manhattan Skyscraper Explorer Main Application
- * Author: Raluca Nicola
- * Date: 07/06/17
- * Description: Main application file where the UI and scene view are loaded
- */
+* Title: Manhattan Skyscraper Explorer Main Application
+* Author: Raluca Nicola
+* Date: 07/06/17
+* Description: Main application file where the UI and scene view are loaded
+*/
 
 define([
   "dojo/_base/declare",
-
   "esri/core/Accessor",
 
+
   "esri/Map",
+ "esri/Basemap",
   "esri/views/SceneView",
   "esri/layers/ElevationLayer",
   "esri/layers/SceneLayer",
@@ -38,6 +39,7 @@ define([
   "esri/tasks/support/Query",
   "esri/renderers/SimpleRenderer",
   "esri/core/watchUtils",
+  "esri/Ground",
 
   "app/RendererGenerator",
   "app/HeightGraph",
@@ -51,7 +53,7 @@ define([
   "dojo/on",
   "dojo/query"
 ], function(declare, Accessor,
-  Map, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils,
+  Map, Basemap, SceneView, ElevationLayer, SceneLayer, FeatureLayer, SimpleRenderer, Query, watchUtils, Ground,
   RendererGenerator, HeightGraph, Timeline, InfoWidget, labels, searchWidget, categorySelection,
   dom, on, domQuery
 ) {
@@ -80,7 +82,7 @@ define([
      */
 
     init: function(containers) {
-		
+
       var settings = this.settings;
       var state = this.state;
 
@@ -90,9 +92,27 @@ define([
       
 
       // create map
+
+      var basemap = new Basemap({
+        portalItem: {
+          id: "f9af6367a86b450b893f41c1ca357a39"
+        }
+      });
+
+      var worldElevation = ElevationLayer({
+        url: "//elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
+      });
+      var customElevation = ElevationLayer({
+        url: "https://tiles.arcgis.com/tiles/ivZnKqrRPYFS9V9R/arcgis/rest/services/DTM_2014_KTZH_ProjectRaster/ImageServer"
+      });
+      
+      var ground = new Ground({
+        layers: [worldElevation]
+      });
+
       var map = new Map({
-        basemap: 'topo',
-        ground: "world-elevation"
+       basemap: "topo",
+        ground: ground
       });
 
       // create view
@@ -104,7 +124,7 @@ define([
         },
         camera: {
           position: {
-            x: 8.54891918,
+           x: 8.54891918,
             y: 47.3455014,
             z: 1061.2
           },
@@ -117,7 +137,7 @@ define([
             mode: "manual"
           }
         },
-        highlightOptions: this.settings.highlightOptions,
+        highlightOptions: settings.highlightOptions,
         popup: {
           dockEnabled: true,
           dockOptions: {
@@ -130,17 +150,32 @@ define([
           lighting: {
             ambientOcclusionEnabled: true,
             directShadowsEnabled: true,
-			date: new Date("Tue Jun 21 2019 10:00:00 GMT+0100 (CET)")
+      date: new Date("Tue Jun 21 2019 10:00:00 GMT+0100 (CET)")
           }
         }
       });
+
+
+
+    // Create the event's callback functions
+    /*on(dom.byId("timeOfDaySelect"), "change", function(ev) {
+      var select = ev.target;
+      var date = select.options[select.selectedIndex].value;
+      view.environment.lighting.date = new Date(date);
+    });
+    
+    on(dom.byId("directShadowsInput"), "change", function updateDirectShadows(ev) {
+      view.environment.lighting.directShadowsEnabled = !!ev.target.checked;
+    });*/
+
+
     
       /*watchUtils.whenFalse(view, "updating", function (evt) {
         dom.byId("loading").style.display = "none";
       });*/
       
-	  // remove navigation widgets from upper left corner
-    view.ui.move(["zoom", "compass"], "bottom-left");
+    // remove navigation widgets from upper left corner
+    view.ui.move(["zoom", "compass"], "bottom-right");
     view.ui.empty("top-left");
 
       // set view on the window for debugging
@@ -158,9 +193,9 @@ define([
         outFields: ["*"],
         //definitionExpression: definitionExpression
 
-	  });
+    });
 
-      var rendererGen = new RendererGenerator(this.settings, sceneLayer, "CNSTRCT_YR", state);
+      var rendererGen = new RendererGenerator(settings, sceneLayer, "CNSTRCT_YR", state);
 
       // feature layer with centroids of buildings - displayed on top of buildings to show which buildings contain information from wikipedia
       var infoPoints = new FeatureLayer({
@@ -178,27 +213,96 @@ define([
         },
         //renderer: rendererGen.createUniqueValueRenderer("WIKI", {value: 1, image: "./img/wiki.png"}),
         //visible: false,
-		definitionExpression: "(GEBAEUDETYP = 'Hochhaus PBG' OR GEBAEUDETYP = 'Hochhaus Studie') AND CNSTRCT_YR >= " + settings.buildingOptions.minCnstrctYear + " AND CNSTRCT_YR <= " + settings.buildingOptions.maxCnstrctYear
+    definitionExpression: "(GEBAEUDETYP = 'Hochhaus PBG' OR GEBAEUDETYP = 'Hochhaus Studie') AND CNSTRCT_YR >= " + settings.buildingOptions.minCnstrctYear + " AND CNSTRCT_YR <= " + settings.buildingOptions.maxCnstrctYear
       });
-	  
-	  // BZO Hochhausgebiete
-	  var HHGebiete = new FeatureLayer({
-		 url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/BZO_Hochhausgebiet_neu/FeatureServer",
-		 opacity: 0.85,
-		 visible: false
-	  });
-	  
-      map.addMany([sceneLayer/*, infoPoints*/, HHGebiete/*, Verdichtung*/]);
-	  
-	  var HHGebieteToggle = dom.byId("HHGebieteLayer");
-	  
-	  // Listen to the onchange event for the checkbox
-      on(HHGebieteToggle, "change", function(){
-      // When the checkbox is checked (true), set the layer's visibility to true
-		HHGebiete.visible = HHGebieteToggle.checked;
-	  });
-	  
+    
+    // BZO Hochhausgebiete
+    var HHGebiete = new FeatureLayer({
+     url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/BZO_Hochhausgebiet_neu/FeatureServer",
+     opacity: 0.85,
+     visible: false
+    });
 
+    // BZO-Nutzungsplan
+    /*var BZO_Zonen = new FeatureLayer({
+      url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Zonenplan_BZO/FeatureServer",
+      opacity: 0.85,
+      visible: false
+     });
+
+    // Praegende Achsen
+    var Achsen = new FeatureLayer({
+      url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Strassenachsen/FeatureServer",
+      opacity: 0.85,
+      visible: false
+     });
+
+    // Zentren
+    var Zentren = new FeatureLayer({
+      url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Zentren_merge/FeatureServer",
+      opacity: 0.85,
+      visible: false
+     });
+
+    // Dichtegebiete
+    var Dichtegebiete = new FeatureLayer({
+      url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Dichtegebiete/FeatureServer",
+      opacity: 0.85,
+      visible: false
+     });
+
+         // Verdichtungsgebiete
+    var Verdichtung = new FeatureLayer({
+      url: "https://services1.arcgis.com/ivZnKqrRPYFS9V9R/arcgis/rest/services/Verdichtungsgebiete/FeatureServer",
+      opacity: 0.85,
+      visible: false
+     });*/
+    
+      map.addMany([sceneLayer, /*BZO_Zonen, */HHGebiete, /*Verdichtung, Dichtegebiete, Zentren, Achsen*/]);
+    
+    var HHGebieteToggle = dom.byId("HHGebieteLayer");
+    //var BZO_ZonenToggle = dom.byId("BZO_ZonenLayer");
+    //var AchsenToggle = dom.byId("AchsenLayer");
+    //var ZentrenToggle = dom.byId("ZentrenLayer");
+    //var DichteToggle = dom.byId("DichteLayer");
+    //var VerdichtungToggle = dom.byId("VerdichtungLayer");
+    
+    // Listen to the onchange event for the checkbox
+    on(HHGebieteToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+    HHGebiete.visible = HHGebieteToggle.checked;
+    });
+
+    /*// Listen to the onchange event for the checkbox
+    on(BZO_ZonenToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+      BZO_Zonen.visible = BZO_ZonenToggle.checked;
+    });
+
+
+    // Listen to the onchange event for the checkbox
+    on(AchsenToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+    Achsen.visible = AchsenToggle.checked;
+    });
+
+    // Listen to the onchange event for the checkbox
+    on(ZentrenToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+      Zentren.visible = ZentrenToggle.checked;
+    });
+
+    // Listen to the onchange event for the checkbox
+    on(DichteToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+    Dichtegebiete.visible = DichteToggle.checked;
+    });
+
+    // Listen to the onchange event for the checkbox
+    on(VerdichtungToggle, "change", function(){
+      // When the checkbox is checked (true), set the layer's visibility to true
+    Verdichtung.visible = VerdichtungToggle.checked;
+    });*/    
 
       // initialize info widget
       var infoWidget = new InfoWidget(view, state);
@@ -228,12 +332,13 @@ define([
       }
 
       state.watch("selectedPeriod", function(newPeriod) {
+        var newCategory = state.selectedCategory;
         // update building symbology
           rendererGen.applyClassBreaksRenderer(newPeriod);
         // update height graph
-        heightGraph.updatePeriod(newPeriod);
+        heightGraph.updatePeriod(newPeriod, newCategory);
         // update timeline
-          timeline.update(newPeriod);
+        timeline.update(newPeriod);
 
       });
 
@@ -316,7 +421,7 @@ define([
           });
         })
         .otherwise(error);
-
+      
       state.watch("filteredBuildings", function(newFilter) {
         // generate a new definition expression based an the new filter
         var defExp = generateDefinitionExpression(newFilter);
@@ -331,10 +436,7 @@ define([
       state.watch("selectedCategory", function(newCategory) {
         var newPeriod = state.selectedPeriod;
         rendererGen.applyCategory(newCategory, newPeriod);
-        heightGraph.applyCategory(newCategory);
-        //timeline.update(newPeriod);
-        //timeline.applyCategory(newCategory);
-
+        heightGraph.applyCategory(newCategory, newPeriod);
       });
 
       // when user clicks on a building, set it as the selected building in the state
@@ -402,64 +504,163 @@ define([
       on(domQuery(".esri-popup__main-container"), "mouseenter", function() {
         state.hoveredBuilding = null;
       });
-	  
-	  // add events for rechtliche Hinweise
+    
+    // add events for rechtliche Hinweise
       on(dom.byId("RechtLink"), "click", function() {
         dom.byId("RechtContainer").style.display = "inline";
+        dom.byId("NutzungContainer").style.display = "none";
+        dom.byId("ImprContainer").style.display = "none";
       });
       on(dom.byId("close1"), "click", function() {
         dom.byId("RechtContainer").style.display = "none";
       });
-	  
-	  // add events for Impressum window
+    
+    // add events for Impressum window
       on(dom.byId("ImprLink"), "click", function() {
         dom.byId("ImprContainer").style.display = "inline";
+        dom.byId("NutzungContainer").style.display = "none";
+        dom.byId("RechtContainer").style.display = "none";
       });
       on(dom.byId("close2"), "click", function() {
         dom.byId("ImprContainer").style.display = "none";
       });
-	  
-	  // add events for Nutzungshinweise
+    
+    // add events for Nutzungshinweise
       on(dom.byId("NutzungLink"), "click", function() {
         dom.byId("NutzungContainer").style.display = "inline";
+        dom.byId("ImprContainer").style.display = "none";
+        dom.byId("RechtContainer").style.display = "none";
       });
       on(dom.byId("close3"), "click", function() {
         dom.byId("NutzungContainer").style.display = "none";
       });
-	  
-	  // schliessen von PopUps beim Öffnen von anderen PopUps
-      on(dom.byId("ImprLink"), "click", function() {
-        dom.byId("NutzungContainer").style.display = "none";
-      });
-	  on(dom.byId("RechtLink"), "click", function() {
-        dom.byId("NutzungContainer").style.display = "none";
-      });
-	  on(dom.byId("NutzungLink"), "click", function() {
-        dom.byId("ImprContainer").style.display = "none";
-      });
-	  on(dom.byId("RechtLink"), "click", function() {
-        dom.byId("ImprContainer").style.display = "none";
-      });
-	  on(dom.byId("ImprLink"), "click", function() {
-        dom.byId("RechtContainer").style.display = "none";
-      });
-	  on(dom.byId("NutzungLink"), "click", function() {
-        dom.byId("RechtContainer").style.display = "none";
-      });
-    }
-  });
+
+    // add events for Legende
+    on(dom.byId("info1"), "click", function() {
+      dom.byId("info_container_HH").style.display = "inline";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+    });
+    /*on(dom.byId("info2"), "click", function() {
+      dom.byId("info_container_BZO").style.display = "inline";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+    });
+    on(dom.byId("info3"), "click", function() {
+      dom.byId("info_container_Strassen").style.display = "inline";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+    });
+    on(dom.byId("info4"), "click", function() {
+      dom.byId("info_container_Zentren").style.display = "inline";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+    });
+    on(dom.byId("info5"), "click", function() {
+      dom.byId("info_container_Dichte").style.display = "inline";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+    });
+    on(dom.byId("info6"), "click", function() {
+      dom.byId("info_container_Verdichtung").style.display = "inline";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+    });*/
+
+    on(dom.byId("close4"), "click", function() {
+      dom.byId("info_container_HH").style.display = "none";
+    });
+    on(dom.byId("close5"), "click", function() {
+      dom.byId("info_container_BZO").style.display = "none";
+    });
+    on(dom.byId("close6"), "click", function() {
+      dom.byId("info_container_Strassen").style.display = "none";
+    });
+    on(dom.byId("close7"), "click", function() {
+      dom.byId("info_container_Zentren").style.display = "none";
+    });
+    on(dom.byId("close8"), "click", function() {
+      dom.byId("info_container_Dichte").style.display = "none";
+    });
+    on(dom.byId("close9"), "click", function() {
+      dom.byId("info_container_Verdichtung").style.display = "none";
+    });
+
+    // add events for Tageslicht
+    /*on(dom.byId("Tageslicht"), "click", function() {
+      dom.byId("layerToggle").style.display = "none";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+      dom.byId("environmentDiv").style.display = "inline";
+      dom.byId("bg-blue").style.height = "120px";
+      dom.byId("symbole").style.display = "none";
+    });*/
+
+    /*on(dom.byId("close10"), "click", function() {
+      dom.byId("environmentDiv").style.display = "none";
+      dom.byId("bg-blue").style.height = "100px";
+      dom.byId("symbole").style.display = "inline";
+    });*/
+
+    // add events for LayerContainer
+    /*on(dom.byId("Layer"), "click", function() {
+      dom.byId("layerToggle").style.display = "inline";
+      dom.byId("bg-blue").style.height = "300px";
+      dom.byId("environmentDiv").style.display = "none";
+      dom.byId("symbole").style.display = "none";
+    });*/
+
+    /*on(dom.byId("close11"), "click", function() {
+      dom.byId("layerToggle").style.display = "none";
+      dom.byId("bg-blue").style.height = "100px";
+      dom.byId("info_container_Verdichtung").style.display = "none";
+      dom.byId("info_container_HH").style.display = "none";
+      dom.byId("info_container_BZO").style.display = "none";
+      dom.byId("info_container_Strassen").style.display = "none";
+      dom.byId("info_container_Dichte").style.display = "none";
+      dom.byId("info_container_Zentren").style.display = "none";
+      dom.byId("symbole").style.display = "inline";
+    });*/
+  }
+});
+
+    
+
+
 
   function generateDefinitionExpression(filter) {
-	  var minConstructionYear = 0
-	  var maxConstructionYear = 5000
-	  
-	  if (filter[2] !== undefined) {
-		  minConstructionYear = filter[2]
-	  }
-	  if (filter[3] !== undefined) {
-		  maxConstructionYear = filter[3]
-	  }
-	  
+    var minConstructionYear = 0
+    var maxConstructionYear = 5000
+    
+    if (filter[2] !== undefined) {
+      minConstructionYear = filter[2]
+    }
+    if (filter[3] !== undefined) {
+      maxConstructionYear = filter[3]
+    }
+    
     return "HEIGHTROOF > " + filter[0] + " AND " +
       "HEIGHTROOF < " + filter[1] + " AND " +
       "CNSTRCT_YR >= " + minConstructionYear + " AND CNSTRCT_YR <= " + maxConstructionYear;
